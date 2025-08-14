@@ -382,7 +382,6 @@
 
     <!-- عنصر الصوت المخفي -->
     <audio id="relaxAudio" src="../audio/music1.mp3" loop style="display:none"></audio>
-    <div id="audioErrorMsg" class="fixed top-20 left-1/2 transform -translate-x-1/2 bg-red-600 text-white px-6 py-3 rounded-lg shadow-lg z-50 hidden">تعذر تشغيل الصوت! تحقق من الملف أو إعدادات المتصفح.</div>
 
     <script>
         // Game State
@@ -1244,16 +1243,15 @@
         function playRelaxMusic() {
             if (!relaxAudio) relaxAudio = document.getElementById('relaxAudio');
             if (relaxMusicPlaying) {
-                relaxAudio.play().then(() => {
-                    document.getElementById('audioErrorMsg').classList.add('hidden');
-                    document.getElementById('relaxMusicBtn').innerHTML = '<i class="fas fa-volume-mute ml-2"></i> إيقاف الصوت';
-                }).catch((e) => {
-                    document.getElementById('audioErrorMsg').classList.remove('hidden');
-                });
+                    relaxAudio.play().then(() => {
+                        document.getElementById('relaxMusicBtn').innerHTML = '<i class="fas fa-volume-mute ml-2"></i> إيقاف الصوت';
+                    }).catch((e) => {
+                        // ...existing code...
+                    });
             }
-            relaxAudio.onerror = function() {
-                document.getElementById('audioErrorMsg').classList.remove('hidden');
-            };
+                relaxAudio.onerror = function() {
+                    // ...existing code...
+                };
         }
 
         // إيقاف/تشغيل صوت الاسترخاء
@@ -1276,15 +1274,15 @@
             relaxAudio.src = document.getElementById('relaxMusicSelect').value;
             relaxAudio.load();
             if (relaxMusicPlaying) {
-                relaxAudio.play().then(() => {
-                    document.getElementById('audioErrorMsg').classList.add('hidden');
-                }).catch(() => {
-                    document.getElementById('audioErrorMsg').classList.remove('hidden');
-                });
+                    relaxAudio.play().then(() => {
+                        // ...existing code...
+                    }).catch(() => {
+                        // ...existing code...
+                    });
             }
-            relaxAudio.onerror = function() {
-                document.getElementById('audioErrorMsg').classList.remove('hidden');
-            };
+                relaxAudio.onerror = function() {
+                    // ...existing code...
+                };
         }
 
         // زر إيقاف الصوت بشكل صريح
