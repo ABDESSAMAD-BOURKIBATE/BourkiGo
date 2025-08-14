@@ -139,6 +139,10 @@
     </style>
 </head>
 <body class="bg-gradient-to-br from-purple-50 to-blue-50 min-h-screen">
+    <!-- مستوى اللاعب الحالي (يظهر دائماً أعلى الصفحة) -->
+    <div class="w-full text-center py-2 bg-purple-100 text-purple-800 text-lg font-bold shadow md:hidden block">
+        المستوى الحالي: <span id="currentLevelMobile"></span>
+    </div>
     <!-- Header -->
     <header class="bg-white shadow-md py-4 px-6">
         <div class="container mx-auto flex justify-between items-center">
@@ -212,7 +216,18 @@
                         </label>
                         <div id="timerSettings" class="hidden">
                             <label class="block mb-2">الوقت لكل لاعب (دقائق)</label>
-                            <select id="timeSelect" class="w-full p-2 border rounded-lg">
+                            <select id="timeSelect" class="w-full p-2 border rounded-lg" onchange="changeTimerTime()">
+        // تغيير الوقت من القائمة المنسدلة
+        function changeTimerTime() {
+            if (gameState.timerEnabled) {
+                const minutes = parseInt(document.getElementById('timeSelect').value);
+                gameState.timeLimit = minutes * 60;
+                gameState.blackTime = gameState.timeLimit;
+                gameState.whiteTime = gameState.timeLimit;
+                updateTimerDisplay();
+                startTimer();
+            }
+        }
                                 <option value="5">5 دقائق</option>
                                 <option value="10" selected>10 دقائق</option>
                                 <option value="15">15 دقيقة</option>
@@ -391,9 +406,9 @@
             gameMode: null,
             boardSize: 9,
             timerEnabled: false,
-            timeLimit: 600, // 10 minutes in seconds
-            blackTime: 600,
-            whiteTime: 600,
+            timeLimit: null, // سيتم ضبطها من القائمة
+            blackTime: null,
+            whiteTime: null,
             timerInterval: null,
             blackCaptured: 0,
             whiteCaptured: 0,
@@ -497,6 +512,8 @@
         // Select level
         function selectLevel(level) {
             gameState.currentLevel = level;
+            // كل مستوى يحتاج أسر عدد أكبر من الأحجار
+            gameState.requiredCaptures = 20 + (level - 1) * 5;
             generateLevels();
             updateLevelDisplay();
             showMessage(`تم اختيار المستوى ${level}: ${levelDescriptions[level-1].name}`);
@@ -507,11 +524,19 @@
             document.getElementById('currentLevelDisplay').textContent = gameState.currentLevel;
             document.getElementById('levelDescription').textContent = levelDescriptions[gameState.currentLevel-1].description;
             updateLevelProgress();
+            // تحديث مستوى الهاتف
+            var mobileLevel = document.getElementById('currentLevelMobile');
+            if (mobileLevel) mobileLevel.textContent = gameState.currentLevel;
         }
 
         // Update level progress
         function updateLevelProgress() {
-            const progress = (gameState.levelProgress / 100) * 100;
+            // التقدم الحقيقي حسب عدد الأحجار المطلوبة للفوز
+            let progress = 0;
+            if (gameState.requiredCaptures && gameState.requiredCaptures > 0) {
+                progress = (gameState.blackCaptured / gameState.requiredCaptures) * 100;
+            }
+            progress = Math.min(progress, 100);
             document.getElementById('levelProgress').style.width = `${progress}%`;
             document.getElementById('progressText').textContent = `${Math.round(progress)}%`;
         }
@@ -562,6 +587,11 @@
                 gameState.blackTime = gameState.timeLimit;
                 gameState.whiteTime = gameState.timeLimit;
                 updateTimerDisplay();
+            }
+            else {
+                gameState.timeLimit = null;
+                gameState.blackTime = null;
+                gameState.whiteTime = null;
             }
         }
 
@@ -686,10 +716,30 @@
                 gameState.koPoint = null;
             }
             
-            // Update level progress for single player
-            if (gameState.gameMode === 'single' && gameState.currentPlayer === 'black') {
-                gameState.levelProgress = Math.min(100, gameState.levelProgress + 10);
-                updateLevelProgress();
+            // تحقق من الفوز بالمستوى
+            if (gameState.gameMode === 'single') {
+                // إذا أسر اللاعب العدد المطلوب
+                if (gameState.blackCaptured >= gameState.requiredCaptures) {
+                    endGame('مبروك! فزت بالمستوى عبر أسر ' + gameState.requiredCaptures + ' حجر.');
+                    // فتح المستوى التالي
+                    if (!gameState.completedLevels.includes(gameState.currentLevel)) {
+                        gameState.completedLevels.push(gameState.currentLevel);
+                        if (gameState.currentLevel < gameState.maxLevel) {
+                            gameState.currentLevel++;
+                        }
+                        // زيادة عدد الأحجار المطلوبة للمستوى التالي
+                        gameState.requiredCaptures = 20 + (gameState.currentLevel - 1) * 5;
+                        generateLevels();
+                        saveGame();
+                    }
+                    return;
+                }
+                // إذا أسر الكمبيوتر العدد المطلوب
+                if (gameState.whiteCaptured >= gameState.requiredCaptures) {
+                    endGame('خسرت! الكمبيوتر أسر ' + gameState.requiredCaptures + ' حجر.');
+                    // لا يتم فتح المستوى التالي
+                    return;
+                }
             }
             
             // Switch player
@@ -814,6 +864,10 @@
         function switchPlayer() {
             gameState.currentPlayer = gameState.currentPlayer === 'black' ? 'white' : 'black';
             updateCurrentPlayerDisplay();
+            // إعادة تشغيل المؤقت عند تبديل اللاعب
+            if (gameState.timerEnabled && gameState.gameActive) {
+                startTimer();
+            }
         }
 
         // Update current player display
@@ -1013,6 +1067,9 @@
             
             // Reset timer
             if (gameState.timerEnabled) {
+                // دائماً خذ القيمة من القائمة عند بدء لعبة جديدة
+                const minutes = parseInt(document.getElementById('timeSelect').value);
+                gameState.timeLimit = minutes * 60;
                 gameState.blackTime = gameState.timeLimit;
                 gameState.whiteTime = gameState.timeLimit;
                 updateTimerDisplay();
@@ -1147,20 +1204,17 @@
         // End game
         function endGame(message = null) {
             gameState.gameActive = false;
-            
+            // إيقاف المؤقت عند انتهاء اللعبة
             if (gameState.timerInterval) {
                 clearInterval(gameState.timerInterval);
+                gameState.timerInterval = null;
             }
-            
-            // Calculate winner
+            // حساب الفائز
             if (!message) {
                 const blackScore = calculateScore('black');
                 const whiteScore = calculateScore('white');
-                
                 if (blackScore > whiteScore) {
                     message = `انتهت اللعبة! الفائز هو الأسود (${blackScore} - ${whiteScore})`;
-                    
-                    // Check if player won and advance level
                     if (gameState.gameMode === 'single' && gameState.currentLevel < gameState.maxLevel) {
                         gameState.currentLevel++;
                         if (!gameState.completedLevels.includes(gameState.currentLevel - 1)) {
@@ -1176,8 +1230,7 @@
                     message = `انتهت اللعبة بالتعادل (${blackScore} - ${whiteScore})`;
                 }
             }
-            
-            // Show game over modal
+            // عرض نافذة نهاية اللعبة
             document.getElementById('gameResult').textContent = message;
             document.getElementById('gameOverModal').classList.remove('hidden');
             document.getElementById('gameOverModal').classList.add('flex');
