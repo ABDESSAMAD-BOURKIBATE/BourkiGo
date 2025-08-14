@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دليل لعبة بوركي جو BourkiGo - الشامل</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&display=swap');
+        
+        * {
+            font-family: 'Tajawal', sans-serif;
+        }
+        
+        .board-cell {
+            position: relative;
+            background: #f0e6d2;
+            border: 1px solid #d4c4a0;
+            transition: all 0.2s ease;
+        }
+        
+        .stone {
+            position: absolute;
+            width: 80%;
+            height: 80%;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .stone-black {
+            background: radial-gradient(circle at 30% 30%, #4a4a4a, #000);
+            box-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .stone-white {
+            background: radial-gradient(circle at 30% 30%, #fff, #e0e0e0);
+            box-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .example-board {
+            display: grid;
+            gap: 0;
+            background: #f0e6d2;
+            padding: 10px;
+            border-radius: 8px;
+        }
+        
+        .highlight-move {
+            animation: highlight 1s ease-in-out infinite;
+        }
+        
+        @keyframes highlight {
+            0%, 100% { background-color: #fef3c7; }
+            50% { background-color: #fbbf24; }
+        }
+        
+        .arrow-path {
+            stroke: #7c3aed;
+            stroke-width: 3;
+            fill: none;
+            marker-end: url(#arrowhead);
+        }
+        
+        .guide-section {
+            scroll-margin-top: 100px;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .strategy-card {
+            transition: all 0.3s ease;
+        }
+        
+        .strategy-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-purple-50 to-blue-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-md sticky top-0 z-40">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4 space-x-reverse">
+                    <div class="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center">
+                        <i class="fas fa-circle text-white text-2xl"></i>
+                    </div>
+                    <h1 class="text-2xl font-bold text-purple-800">دليل لعبة بوركي جو BourkiGo</h1>
+                </div>
+                    <a href="/BourkiGo.html" class="md:hidden block px-4 py-2 bg-blue-600 text-white rounded-lg text-lg shadow hover:bg-blue-700 transition">الرئيسية</a>
+                <nav class="hidden md:flex space-x-6 space-x-reverse">
+                        <a href="/BourkiGo.html" class="hover:text-blue-600 font-bold transition">الرئيسية</a>
+                        <a href="#intro" class="hover:text-purple-600 transition">مقدمة</a>
+                        <a href="#rules" class="hover:text-purple-600 transition">القواعد</a>
+                        <a href="#how-to-play" class="hover:text-purple-600 transition">كيف تلعب</a>
+                        <a href="#strategies" class="hover:text-purple-600 transition">استراتيجيات</a>
+                        <a href="#examples" class="hover:text-purple-600 transition">أمثلة</a>
+                        <a href="#terms" class="hover:text-purple-600 transition">مصطلحات</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+    <div class="container mx-auto px-4 py-8">
+        <!-- Introduction Section -->
+        <section id="intro" class="guide-section mb-12">
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <h2 class="text-4xl font-bold text-purple-800 mb-6 text-center">
+                    <i class="fas fa-book-open ml-3"></i>مقدمة عن لعبة جو
+                </h2>
+                
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <p class="text-lg text-gray-700 mb-4 leading-relaxed">
+                            لعبة جو (Go) هي إحدى أقدم الألعاب الاستراتيجية في العالم، نشأت في الصين قبل أكثر من 2500 عام،
+                            ثم انتشرت إلى اليابان وكوريا وأصبحت جزءاً من الثقافة الآسيوية. تعتبر لعبة جو من أكثر الألعاب تعقيداً
+                            وإثارة للعقل، حيث تتطلب تفكيراً عميقاً وتخطيطاً استراتيجياً.
+                        </p>
+                        
+                        <div class="bg-purple-50 p-6 rounded-lg mb-4">
+                            <h3 class="text-xl font-bold text-purple-700 mb-3">
+                                <i class="fas fa-lightbulb ml-2"></i>لماذا تعتبر لعبة جو مميزة؟
+                            </h3>
+                            <ul class="space-y-2 text-gray-700">
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-circle text-green-500 ml-2 mt-1"></i>
+                                    <span>تطوير مهارات التفكير النقدي وحل المشكلات</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-circle text-green-500 ml-2 mt-1"></i>
+                                    <span>تعليم التخطيط طويل الأمد والتفكير الاستراتيجي</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-circle text-green-500 ml-2 mt-1"></i>
+                                    <span>تحسين التركيز والذاكرة والانتباه للتفاصيل</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-circle text-green-500 ml-2 mt-1"></i>
+                                    <span>تنمية المهارات الرياضية والمنطقية</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <img src="https://picsum.photos/seed/go-board/400/300" alt="لوحة جو" class="rounded-lg shadow-lg mb-4">
+                        <div class="grid grid-cols-2 gap-4 text-center">
+                            <div class="bg-blue-50 p-4 rounded-lg">
+                                <i class="fas fa-history text-3xl text-blue-600 mb-2"></i>
+                                <p class="font-semibold">2500+ سنة</p>
+                                <p class="text-sm text-gray-600">من التاريخ</p>
+                            </div>
+                            <div class="bg-green-50 p-4 rounded-lg">
+                                <i class="fas fa-globe-asia text-3xl text-green-600 mb-2"></i>
+                                <p class="font-semibold">60+ مليون</p>
+                                <p class="text-sm text-gray-600">لاعب حول العالم</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Equipment Section -->
+        <section id="equipment" class="guide-section mb-12">
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <h2 class="text-4xl font-bold text-purple-800 mb-6 text-center">
+                    <i class="fas fa-chess-board ml-3"></i>معدات اللعبة
+                </h2>
+                
+                <div class="grid md:grid-cols-3 gap-6">
+                    <!-- Board -->
+                    <div class="text-center">
+                        <div class="bg-amber-100 p-6 rounded-lg mb-4">
+                            <i class="fas fa-th text-6xl text-amber-700 mb-4"></i>
+                            <h3 class="text-xl font-bold text-amber-800 mb-2">اللوحة</h3>
+                            <p class="text-gray-700">
+                                لوحة مربعة مقسمة إلى شبكة من الخطوط. الأحجام الشائعة:
+                            </p>
+                            <ul class="mt-3 space-y-1 text-sm text-gray-600">
+                                <li>• 9×9 (للمبتدئين)</li>
+                                <li>• 13×13 (متوسط)</li>
+                                <li>• 19×19 (محترف)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Stones -->
+                    <div class="text-center">
+                        <div class="bg-gray-100 p-6 rounded-lg mb-4">
+                            <div class="flex justify-center space-x-4 space-x-reverse mb-4">
+                                <div class="w-16 h-16 stone-black rounded-full"></div>
+                                <div class="w-16 h-16 stone-white rounded-full"></div>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800 mb-2">الأحجار</h3>
+                            <p class="text-gray-700">
+                                حجرين أسود وأبيض. الأسود يبدأ اللعبة دائماً.
+                                عدد الأحجار يكفي لملء اللوحة.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- Accessories -->
+                    <div class="text-center">
+                        <div class="bg-purple-100 p-6 rounded-lg mb-4">
+                            <i class="fas fa-box text-6xl text-purple-700 mb-4"></i>
+                            <h3 class="text-xl font-bold text-purple-800 mb-2">إضافات</h3>
+                            <p class="text-gray-700">
+                                • أوعية لتخزين الأحجار<br>
+                                • مؤقت للتحكم بالوقت<br>
+                                • دفتر لتسجيل النقاط
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Basic Rules Section -->
+        <section id="basic-rules" class="guide-section mb-12">
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <h2 class="text-4xl font-bold text-purple-800 mb-6 text-center">
+                    <i class="fas fa-list-ol ml-3"></i>القواعد الأساسية
+                </h2>
+                
+                <div class="space-y-6">
+                    <!-- Rule 1 -->
+                    <div class="border-l-4 border-purple-600 pl-6">
+                        <h3 class="text-2xl font-bold text-purple-700 mb-3">
+                            القاعدة الأولى: وضع الأحجار
+                        </h3>
+                        <p class="text-gray-700 mb-4">
+                            يضع اللاعبون الأحجار بالتناوب على تقاطعات الخطوط. اللاعب الأسود يبدأ دائماً.
+                            بمجرد وضع الحجر، لا يمكن تحريكه.
+                        </p>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <div class="example-board grid-cols-5 gap-0 w-48 mx-auto">
+                                <div class="board-cell aspect-square"></div>
+                                <div class="board-cell aspect-square"></div>
+                                <div class="board-cell aspect-square"></div>
+                                <div class="board-cell aspect-square"></div>
+                                <div class="board-cell aspect-square"></div>
+                                <div class="board-cell aspect-square"></div>
+                                <div class="board-cell aspect-square relative">
+                                    <div class="stone stone-black"></div>
+                                </div>
+                                <div class="board-cell aspect-square"></div>
+                                <div class="board-cell aspect-square"></div>
+                                <div class="board-cell aspect-square"></div>
+                                <div class="board-cell aspect-square"></div>
+                                <div class="board-cell aspect-square"></div>
+                                <div class="board-cell aspect-square relative">
+                                    <div class="stone stone-white"></div>
+                                </div>
+                                <div class="board-cell aspect-square"></div>
+                                <div class="board-cell aspect-square"></div>
+                            </div>
+                            <p class="text-center text-sm text-gray-600 mt-2">مثال: الأسود يضع حجراً ثم الأبيض</p>
+                        </div>
+                    </div>
+                    <!-- Rule 2 -->
+                    <div class="border-l-4 border-blue-600 pl-6">
+                        <h3 class="text-2xl font-bold text-blue-700 mb-3">
+                            القاعدة الثانية: احتجاز الأحجار
+                        </h3>
+                        <p class="text-gray-700 mb-4">
+                            عندما يتم حصر مجموعة من أحجار الخصم بحيث لا يكون لها أي "حرية" (نقطة فارغة مجاورة)،
+                            تتم إزالتها من اللوحة.
+                        </p>
+                        <div class="bg-blue-50 p-4 rounded-lg">
+                            <div class="example-board grid-cols-5 gap-0 w-48 mx-auto mb-4">
+                                <div class="board-cell aspect-square"></div>
+                                <div class="board-cell aspect-square relative">
+                                    <div class="stone stone-black"></div>
+                                </div>
+                                <div class="board-cell aspect-square"></div>
+                                <div class="board-cell aspect-square"></div>
+                                <div class="board-cell aspect-square"></div>
+                                <div class="board-cell aspect-square relative">
+                                    <div class="stone stone-black"></div>
+                                </div>
+                                <div class="board-cell aspect-square relative">
+                                    <div class="stone stone-white"></div>
+                                </div>
+                                <div class="board-cell aspect-square relative">
+                                    <div class="stone stone-black"></div>
+                                </div>
+                                <div class="board-cell aspect-square"></div>
+                                <div class="board-cell aspect-square"></div>
+                                <div class="board-cell aspect-square"></div>
+                                <div class="board-cell aspect-square relative">
+                                    <div class="stone stone-black"></div>
+                                </div>
+                                <div class="board-cell aspect-square"></div>
+                                <div class="board-cell aspect-square"></div>
+                            </div>
+                            <p class="text-center text-sm text-gray-600">
+                                الحجر الأبيض محاصر من جميع الجهات - سيتم إزالته
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Rule 3 -->
+                    <div class="border-l-4 border-green-600 pl-6">
+                        <h3 class="text-2xl font-bold text-green-700 mb-3">
+                            القاعدة الثالثة: منع الانتحار
+                        </h3>
+                        <p class="text-gray-700 mb-4">
+                            لا يمكنك وضع حجر في مكان سيتم احتجازه فوراً إلا إذا كنت تحتجز أحجار الخصم في نفس الوقت.
+                        </p>
+                        <div class="bg-green-50 p-4 rounded-lg">
+                            <div class="example-board grid-cols-3 gap-0 w-32 mx-auto mb-4">
+                                <div class="board-cell aspect-square relative">
+                                    <div class="stone stone-black"></div>
+                                </div>
+                                <div class="board-cell aspect-square"></div>
+                                <div class="board-cell aspect-square relative">
+                                    <div class="stone stone-black"></div>
+                                </div>
+                                <div class="board-cell aspect-square"></div>
+                                <div class="board-cell aspect-square bg-red-200"></div>
+                                <div class="board-cell aspect-square"></div>
+                                <div class="board-cell aspect-square relative">
+                                    <div class="stone stone-black"></div>
+                                </div>
+                                <div class="board-cell aspect-square"></div>
+                                <div class="board-cell aspect-square relative">
+                                    <div class="stone stone-black"></div>
+                                </div>
+                            </div>
+                            <p class="text-center text-sm text-gray-600">
+                                لا يمكن وضع حجر أبيض في المركز (حركة انتحارية)
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Rule 4 -->
+                    <div class="border-l-4 border-red-600 pl-6">
+                        <h3 class="text-2xl font-bold text-red-700 mb-3">
+                            القاعدة الرابعة: قاعدة الكو (Ko)
+                        </h3>
+                        <p class="text-gray-700 mb-4">
+                            لا يمكنك إعادة الحالة السابقة للوحة فوراً. هذه القاعدة تمنع الحلقات اللانهائية.
+                        </p>
+                        <div class="bg-red-50 p-4 rounded-lg">
+                            <div class="flex justify-center space-x-8 space-x-reverse mb-4">
+                                <div>
+                                    <p class="text-center text-sm font-semibold mb-2">الحالة الأولى</p>
+                                    <div class="example-board grid-cols-3 gap-0 w-24">
+                                        <div class="board-cell aspect-square"></div>
+                                        <div class="board-cell aspect-square relative">
+                                            <div class="stone stone-black"></div>
+                                        </div>
+                                        <div class="board-cell aspect-square"></div>
+                                        <div class="board-cell aspect-square relative">
+                                            <div class="stone stone-white"></div>
+                                        </div>
+                                        <div class="board-cell aspect-square"></div>
+                                        <div class="board-cell aspect-square relative">
+                                            <div class="stone stone-white"></div>
+                                        </div>
+                                        <div class="board-cell aspect-square"></div>
+                                        <div class="board-cell aspect-square relative">
+                                            <div class="stone stone-black"></div>
+                                        </div>
+                                        <div class="board-cell aspect-square"></div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-arrow-left text-2xl text-red-600"></i>
+                                </div>
+                                <div>
+                                    <p class="text-center text-sm font-semibold mb-2">بعد الاحتجاز</p>
+                                    <div class="example-board grid-cols-3 gap-0 w-24">
+                                        <div class="board-cell aspect-square"></div>
+                                        <div class="board-cell aspect-square"></div>
+                                        <div class="board-cell aspect-square"></div>
+                                        <div class="board-cell aspect-square relative">
+                                            <div class="stone stone-white"></div>
+                                        </div>
+                                        <div class="board-cell aspect-square relative">
+                                            <div class="stone stone-black"></div>
+                                        </div>
+                                        <div class="board-cell aspect-square relative">
+                                            <div class="stone stone-white"></div>
+                                        </div>
+                                        <div class="board-cell aspect-square"></div>
+                                        <div class="board-cell aspect-square relative">
+                                            <div class="stone stone-black"></div>
+                                        </div>
+                                        <div class="board-cell aspect-square"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="text-center text-sm text-gray-600">
+                                لا يمكن للأبيض إعادة الحجر الأسود فوراً
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- How to Play Section -->
+        <section id="gameplay" class="guide-section mb-12">
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <h2 class="text-4xl font-bold text-purple-800 mb-6 text-center">
+                    <i class="fas fa-gamepad ml-3"></i>كيفية اللعب خطوة بخطوة
+                </h2>
+                
+                <div class="space-y-8">
+                    <!-- Step 1 -->
+                    <div class="flex items-start space-x-6 space-x-reverse">
+                        <div class="flex-shrink-0 w-16 h-16 bg-purple-600 text-white rounded-full flex items-center justify-center text-2xl font-bold">
+                            1
+                        </div>
+                        <div class="flex-grow">
+                            <h3 class="text-2xl font-bold text-purple-700 mb-3">البدء باللعبة</h3>
+                            <p class="text-gray-700 mb-4">
+                                اللاعب الأسود يضع أول حجر في أي مكان على اللوحة. الأفضل هو البدء في الزوايا أو على الحواف
+                                لأنها أسهل في الدفاع عنها.
+                            </p>
+                            <div class="bg-purple-50 p-4 rounded-lg">
+                                <div class="example-board grid-cols-9 gap-0 w-64 mx-auto">
+                                    <!-- Generate a 9x9 board with one black stone in corner -->
+                                    <script>
+                                        document.write('<div class="board-cell aspect-square relative"><div class="stone stone-black"></div></div>');
+                                        for(let i = 1; i < 81; i++) {
+                                            document.write('<div class="board-cell aspect-square"></div>');
+                                        }
+                                    </script>
+                                </div>
+                                <p class="text-center text-sm text-gray-600 mt-2">البدء في الزاوية هو استراتيجية شائعة</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Step 2 -->
+                    <div class="flex items-start space-x-6 space-x-reverse">
+                        <div class="flex-shrink-0 w-16 h-16 bg-blue-600 text-white rounded-full flex items-center justify-center text-2xl font-bold">
+                            2
+                        </div>
+                        <div class="flex-grow">
+                            <h3 class="text-2xl font-bold text-blue-700 mb-3">رد الأبيض</h3>
+                            <p class="text-gray-700 mb-4">
+                                اللاعب الأبيض يرد بوضع حجره. يمكنه اللعب بعيداً عن الأسود لإنشاء مناطق مختلفة،
+                                أو قريباً لبدء معركة مباشرة.
+                            </p>
+                            <div class="bg-blue-50 p-4 rounded-lg">
+                                <div class="example-board grid-cols-9 gap-0 w-64 mx-auto">
+                                    <script>
+                                        document.write('<div class="board-cell aspect-square relative"><div class="stone stone-black"></div></div>');
+                                        for(let i = 1; i < 40; i++) {
+                                            document.write('<div class="board-cell aspect-square"></div>');
+                                        }
+                                        document.write('<div class="board-cell aspect-square relative"><div class="stone stone-white"></div></div>');
+                                        for(let i = 41; i < 81; i++) {
+                                            document.write('<div class="board-cell aspect-square"></div>');
+                                        }
+                                    </script>
+                                </div>
+                                <p class="text-center text-sm text-gray-600 mt-2">الأبيض يلعب في الزاوية المقابلة</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Step 3 -->
+                    <div class="flex items-start space-x-6 space-x-reverse">
+                        <div class="flex-shrink-0 w-16 h-16 bg-green-600 text-white rounded-full flex items-center justify-center text-2xl font-bold">
+                            3
+                        </div>
+                        <div class="flex-grow">
+                            <h3 class="text-2xl font-bold text-green-700 mb-3">توسيع النفوذ</h3>
+                            <p class="text-gray-700 mb-4">
+                                يستمر اللاعبان في وضع الأحجار لتوسيع نفوذهما. الهدف هو السيطرة على أكبر مساحة ممكنة
+                                من اللوحة.
+                            </p>
+                            <div class="bg-green-50 p-4 rounded-lg">
+                                <div class="example-board grid-cols-9 gap-0 w-64 mx-auto">
+                                    <script>
+                                        // Simulate a mid-game position
+                                        const positions = [
+                                            {row: 0, col: 0, color: 'black'},
+                                            {row: 0, col: 2, color: 'black'},
+                                            {row: 2, col: 0, color: 'black'},
+                                            {row: 6, col: 6, color: 'white'},
+                                            {row: 6, col: 8, color: 'white'},
+                                            {row: 8, col: 6, color: 'white'},
+                                            {row: 0, col: 6, color: 'white'},
+                                            {row: 2, col: 8, color: 'black'},
+                                            {row: 4, col: 4, color: 'black'},
+                                            {row: 4, col: 5, color: 'white'}
+                                        ];
+                                        
+                                        for(let i = 0; i < 81; i++) {
+                                            const row = Math.floor(i / 9);
+                                            const col = i % 9;
+                                            const stone = positions.find(p => p.row === row && p.col === col);
+                                            if(stone) {
+                                                document.write(`<div class="board-cell aspect-square relative"><div class="stone stone-${stone.color}"></div></div>`);
+                                            } else {
+                                                document.write('<div class="board-cell aspect-square"></div>');
+                                            }
+                                        }
+                                    </script>
+                                </div>
+                                <p class="text-center text-sm text-gray-600 mt-2">مرحلة متوسطة من اللعبة</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Step 4 -->
+                    <div class="flex items-start space-x-6 space-x-reverse">
+                        <div class="flex-shrink-0 w-16 h-16 bg-orange-600 text-white rounded-full flex items-center justify-center text-2xl font-bold">
+                            4
+                        </div>
+                        <div class="flex-grow">
+                            <h3 class="text-2xl font-bold text-orange-700 mb-3">إنهاء اللعبة</h3>
+                            <p class="text-gray-700 mb-4">
+                                عندما يقرر كلا اللاعبين أنه لا توجد حركات مفيدة أخرى، يمرران دوريهما متتالياً.
+                                ثم يتم حساب النقاط لتحديد الفائز.
+                            </p>
+                            <div class="bg-orange-50 p-4 rounded-lg">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <h4 class="font-semibold mb-2">علامات نهاية اللعبة:</h4>
+                                        <ul class="text-sm text-gray-700 space-y-1">
+                                            <li>• تمريران متتاليان</li>
+                                            <li>• ملء معظم الفراغات</li>
+                                            <li>• تحديد الحدود بوضوح</li>
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold mb-2">ماذا بعد؟</h4>
+                                        <ul class="text-sm text-gray-700 space-y-1">
+                                            <li>• إزالة الأحجار المحصورة</li>
+                                            <li>• حساب المساحات المحتلة</li>
+                                            <li>• جمع النقاط</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Scoring Section -->
+        <section id="scoring" class="guide-section mb-12">
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <h2 class="text-4xl font-bold text-purple-800 mb-6 text-center">
+                    <i class="fas fa-calculator ml-3"></i>حساب النقاط
+                </h2>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="text-2xl font-bold text-purple-700 mb-4">طريقة الحساب</h3>
+                        <p class="text-gray-700 mb-4">
+                            يتم حساب النقاط لكل لاعب بجمع:
+                        </p>
+                        <div class="space-y-3">
+                            <div class="bg-purple-50 p-4 rounded-lg">
+                                <h4 class="font-semibold text-purple-700 mb-2">
+                                    <i class="fas fa-circle ml-2"></i>عدد الأحجار على اللوحة
+                                </h4>
+                                <p class="text-gray-600">كل حجر للون اللاعب يحسب كنقطة واحدة</p>
+                            </div>
+                            <div class="bg-blue-50 p-4 rounded-lg">
+                                <h4 class="font-semibold text-blue-700 mb-2">
+                                    <i class="fas fa-expand-arrows-alt ml-2"></i>المساحات المحتلة
+                                </h4>
+                                <p class="text-gray-600">كل نقطة فارغة محاطة بأحجار اللاعب</p>
+                            </div>
+                            <div class="bg-green-50 p-4 rounded-lg">
+                                <h4 class="font-semibold text-green-700 mb-2">
+                                    <i class="fas fa-times ml-2"></i>الأحجار المحصورة
+                                </h4>
+                                <p class="text-gray-600">عدد أحجار الخصم التي تم احتجازها</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-2xl font-bold text-purple-700 mb-4">مثال تطبيقي</h3>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <div class="example-board grid-cols-5 gap-0 w-40 mx-auto mb-4">
+                                <script>
+                                    const exampleBoard = [
+                                        ['black', null, null, null, 'white'],
+                                        [null, 'black', null, 'white', null],
+                                        [null, null, null, null, null],
+                                        [null, 'white', null, 'black', null],
+                                        ['white', null, null, null, 'black']
+                                    ];
+                                    
+                                    for(let i = 0; i < 25; i++) {
+                                        const row = Math.floor(i / 5);
+                                        const col = i % 5;
+                                        const color = exampleBoard[row][col];
+                                        if(color) {
+                                            document.write(`<div class="board-cell aspect-square relative"><div class="stone stone-${color}"></div></div>`);
+                                        } else {
+                                            document.write('<div class="board-cell aspect-square"></div>');
+                                        }
+                                    }
+                                </script>
+                            </div>
+                            
+                            <div class="space-y-2 text-sm">
+                                <div class="flex justify-between">
+                                    <span>أحجار سوداء:</span>
+                                    <span class="font-bold">4</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>أحجار بيضاء:</span>
+                                    <span class="font-bold">4</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>مساحة سوداء:</span>
+                                    <span class="font-bold">2</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>مساحة بيضاء:</span>
+                                    <span class="font-bold">2</span>
+                                </div>
+                                <hr class="my-2">
+                                <div class="flex justify-between font-bold">
+                                    <span>المجموع الأسود:</span>
+                                    <span>6</span>
+                                </div>
+                                <div class="flex justify-between font-bold">
+                                    <span>المجموع الأبيض:</span>
+                                    <span>6</span>
+                                </div>
+                            </div>
+                            <p class="text-center text-sm text-gray-600 mt-2">تعادل!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Strategies Section -->
+        <section id="strategies" class="guide-section mb-12">
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <h2 class="text-4xl font-bold text-purple-800 mb-6 text-center">
+                    <i class="fas fa-chess ml-3"></i>استراتيجيات أساسية
+                </h2>
+                
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Strategy 1 -->
+                    <div class="strategy-card bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-lg">
+                        <div class="text-center mb-4">
+                            <i class="fas fa-chess-knight text-4xl text-purple-600"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-purple-800 mb-3 text-center">السيطرة على الزوايا</h3>
+                        <p class="text-gray-700 text-sm">
+                            الزوايا هي أسهل أماكن للدفاع عنها. البدء في الزوايا يمنحك قاعدة قوية للتوسع لاحقاً.
+                        </p>
+                        <div class="mt-4 bg-white p-3 rounded">
+                            <p class="text-xs text-gray-600 font-semibold">نصيحة:</p>
+                            <p class="text-xs text-gray-700">ضع أول حجرين في زاويتين متقابلتين</p>
+                        </div>
+                    </div>
+                    <!-- Strategy 2 -->
+                    <div class="strategy-card bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-lg">
+                        <div class="text-center mb-4">
+                            <i class="fas fa-shield-alt text-4xl text-blue-600"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-blue-800 mb-3 text-center">بناء الجدران</h3>
+                        <p class="text-gray-700 text-sm">
+                            أنشئ خطوطاً من أحجارك لإنشاء جدران تحمي مساحتك وتحد من توسع الخصم.
+                        </p>
+                        <div class="mt-4 bg-white p-3 rounded">
+                            <p class="text-xs text-gray-600 font-semibold">نصيحة:</p>
+                            <p class="text-xs text-gray-700">اجعل جدرانك على بعد 3-4 نقاط من الحافة</p>
+                        </div>
+                    </div>
+                    <!-- Strategy 3 -->
+                    <div class="strategy-card bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-lg">
+                        <div class="text-center mb-4">
+                            <i class="fas fa-expand-arrows-alt text-4xl text-green-600"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-green-800 mb-3 text-center">التوسع الذكي</h3>
+                        <p class="text-gray-700 text-sm">
+                            وسّع نفوذك تدريجياً من الزوايا إلى الحواف ثم إلى المركز، مع الحفاظ على اتصال أحجارك.
+                        </p>
+                        <div class="mt-4 bg-white p-3 rounded">
+                            <p class="text-xs text-gray-600 font-semibold">نصيحة:</p>
+                            <p class="text-xs text-gray-700">لا تترك ثغرات في دفاعاتك</p>
+                        </div>
+                    </div>
+                    <!-- Strategy 4 -->
+                    <div class="strategy-card bg-gradient-to-br from-red-50 to-red-100 p-6 rounded-lg">
+                        <div class="text-center mb-4">
+                            <i class="fas fa-fire text-4xl text-red-600"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-red-800 mb-3 text-center">الهجوم والدفاع</h3>
+                        <p class="text-gray-700 text-sm">
+                            تعرف متى تهاجم مجموعات الخصم الضعيفة ومتى تدافع عن أحجارك المهددة.
+                        </p>
+                        <div class="mt-4 bg-white p-3 rounded">
+                            <p class="text-xs text-gray-600 font-semibold">نصيحة:</p>
+                            <p class="text-xs text-gray-700">احسب عدد "الحرية" قبل الهجوم</p>
+                        </div>
+                    </div>
+                    <!-- Strategy 5 -->
+                    <div class="strategy-card bg-gradient-to-br from-yellow-50 to-yellow-100 p-6 rounded-lg">
+                        <div class="text-center mb-4">
+                            <i class="fas fa-brain text-4xl text-yellow-600"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-yellow-800 mb-3 text-center">التفكير الاستراتيجي</h3>
+                        <p class="text-gray-700 text-sm">
+                            فكر عدة خطوات للأمام. كل حركة يجب أن تخدم هدفين: بناء نفوذك وإضعاف الخصم.
+                        </p>
+                        <div class="mt-4 bg-white p-3 rounded">
+                            <p class="text-xs text-gray-600 font-semibold">نصيحة:</p>
+                            <p class="text-xs text-gray-700">اسأل "ماذا سيحدث إذا...؟"</p>
+                        </div>
+                    </div>
+                    <!-- Strategy 6 -->
+                    <div class="strategy-card bg-gradient-to-br from-indigo-50 to-indigo-100 p-6 rounded-lg">
+                        <div class="text-center mb-4">
+                            <i class="fas fa-balance-scale text-4xl text-indigo-600"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-indigo-800 mb-3 text-center">التوازن</h3>
+                        <p class="text-gray-700 text-sm">
+                            حافظ على توازن بين الهجوم والدفاع، وبين التوسع السريع وبناء القواعد القوية.
+                        </p>
+                        <div class="mt-4 bg-white p-3 rounded">
+                            <p class="text-xs text-gray-600 font-semibold">نصيحة:</p>
+                            <p class="text-xs text-gray-700">لا تترك أحجارك معزولة</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Examples Section -->
+        <section id="examples" class="guide-section mb-12">
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <h2 class="text-4xl font-bold text-purple-800 mb-6 text-center">
+                    <i class="fas fa-laptop-code ml-3"></i>أمثلة تطبيقية
+                </h2>
+                
+                <!-- Tabs -->
+                <div class="flex flex-wrap justify-center mb-6 gap-2">
+                    <button onclick="showTab('example1')" class="tab-btn bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition">
+                        مثال 1: الاحتجاز
+                    </button>
+                    <button onclick="showTab('example2')" class="tab-btn bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 transition">
+                        مثال 2: العيش
+                    </button>
+                    <button onclick="showTab('example3')" class="tab-btn bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 transition">
+                        مثال 3: السيطرة
+                    </button>
+                </div>
+                <!-- Tab Contents -->
+                <div id="example1" class="tab-content active">
+                    <h3 class="text-2xl font-bold text-purple-700 mb-4">مثال 1: كيفية احتجاز الأحجار</h3>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h4 class="font-semibold mb-3">الخطوات:</h4>
+                            <ol class="space-y-2 text-gray-700">
+                                <li class="flex items-start">
+                                    <span class="bg-purple-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm ml-2 flex-shrink-0">1</span>
+                                    <span>حدد مجموعة أحجار الخصم الضعيفة</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="bg-purple-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm ml-2 flex-shrink-0">2</span>
+                                    <span>احسب عدد "الحرية" المتاحة لها</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="bg-purple-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm ml-2 flex-shrink-0">3</span>
+                                    <span>ضع أحجارك لسد جميع نقاط الخروج</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="bg-purple-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm ml-2 flex-shrink-0">4</span>
+                                    <span>أزل الأحجار المحصورة من اللوحة</span>
+                                </li>
+                            </ol>
+                        </div>
+                        <div>
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <div class="example-board grid-cols-7 gap-0 w-56 mx-auto mb-4">
+                                    <script>
+                                        // Create a capture example
+                                        const captureExample = [
+                                            [null, null, 'black', null, null, null, null],
+                                            [null, 'black', 'white', 'black', null, null, null],
+                                            [null, 'black', 'white', 'white', 'black', null, null],
+                                            [null, null, 'black', 'white', null, null, null],
+                                            [null, null, null, 'black', null, null, null],
+                                            [null, null, null, null, null, null, null],
+                                            [null, null, null, null, null, null, null]
+                                        ];
+                                        
+                                        for(let i = 0; i < 49; i++) {
+                                            const row = Math.floor(i / 7);
+                                            const col = i % 7;
+                                            const color = captureExample[row][col];
+                                            if(color) {
+                                                document.write(`<div class="board-cell aspect-square relative"><div class="stone stone-${color}"></div></div>`);
+                                            } else {
+                                                document.write('<div class="board-cell aspect-square"></div>');
+                                            }
+                                        }
+                                    </script>
+                                </div>
+                                <p class="text-center text-sm text-gray-600">
+                                    مجموعة الأحجار البيضاء في الوسط محاصرة - سيتم إزالتها
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="example2" class="tab-content">
+                    <h3 class="text-2xl font-bold text-purple-700 mb-4">مثال 2: كيف تجعل أحجارك "تعيش"</h3>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h4 class="font-semibold mb-3">لجعل مجموعة أحجارك تعيش:</h4>
+                            <ul class="space-y-2 text-gray-700">
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-circle text-green-500 ml-2 mt-1"></i>
+                                    <span>أنشئ "عينين" على الأقل في مجموعتك</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-circle text-green-500 ml-2 mt-1"></i>
+                                    <span>العين هي مساحة فارغة محاطة بأحجارك</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-circle text-green-500 ml-2 mt-1"></i>
+                                    <span>المجموعات بعينين لا يمكن احتجازها أبداً</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-circle text-green-500 ml-2 mt-1"></i>
+                                    <span>حافظ على اتصال أحجارك لتجنب العزل</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <div class="example-board grid-cols-7 gap-0 w-56 mx-auto mb-4">
+                                    <script>
+                                        // Create a living group example
+                                        const livingExample = [
+                                            [null, null, null, null, null, null, null],
+                                            [null, 'black', 'black', 'black', 'black', 'black', null],
+                                            [null, 'black', null, null, null, 'black', null],
+                                            [null, 'black', null, null, null, 'black', null],
+                                            [null, 'black', 'black', 'black', 'black', 'black', null],
+                                            [null, null, null, null, null, null, null],
+                                            [null, null, null, null, null, null, null]
+                                        ];
+                                        
+                                        for(let i = 0; i < 49; i++) {
+                                            const row = Math.floor(i / 7);
+                                            const col = i % 7;
+                                            const color = livingExample[row][col];
+                                            if(color) {
+                                                document.write(`<div class="board-cell aspect-square relative"><div class="stone stone-${color}"></div></div>`);
+                                            } else {
+                                                document.write('<div class="board-cell aspect-square"></div>');
+                                            }
+                                        }
+                                    </script>
+                                </div>
+                                <p class="text-center text-sm text-gray-600">
+                                    مجموعة سوداء "حية" بعينين في المنتصف
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="example3" class="tab-content">
+                    <h3 class="text-2xl font-bold text-purple-700 mb-4">مثال 3: السيطرة على المساحات</h3>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h4 class="font-semibold mb-3">استراتيجيات السيطرة:</h4>
+                            <ul class="space-y-2 text-gray-700">
+                                <li class="flex items-start">
+                                    <i class="fas fa-star text-yellow-500 ml-2 mt-1"></i>
+                                    <span>استخدم الزوايا كقواعد انطلاق</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-star text-yellow-500 ml-2 mt-1"></i>
+                                    <span>وسّع من الزوايا إلى الحواف</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-star text-yellow-500 ml-2 mt-1"></i>
+                                    <span>أنشئ جدراناً طويلة لتحديد المساحات</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-star text-yellow-500 ml-2 mt-1"></i>
+                                    <span>تجنب الدخول في معارك غير ضرورية</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <div class="example-board grid-cols-9 gap-0 w-64 mx-auto mb-4">
+                                    <script>
+                                        // Create a territory control example
+                                        const territoryExample = [
+                                            ['black', null, null, null, null, null, null, null, 'white'],
+                                            [null, 'black', null, null, null, null, null, 'white', null],
+                                            [null, null, null, null, null, null, null, null, null],
+                                            [null, null, null, null, null, null, null, null, null],
+                                            [null, null, null, null, null, null, null, null, null],
+                                            [null, null, null, null, null, null, null, null, null],
+                                            [null, null, null, null, null, null, null, null, null],
+                                            [null, 'white', null, null, null, null, null, 'black', null],
+                                            ['white', null, null, null, null, null, null, null, 'black']
+                                        ];
+                                        
+                                        for(let i = 0; i < 81; i++) {
+                                            const row = Math.floor(i / 9);
+                                            const col = i % 9;
+                                            const color = territoryExample[row][col];
+                                            if(color) {
+                                                document.write(`<div class="board-cell aspect-square relative"><div class="stone stone-${color}"></div></div>`);
+                                            } else {
+                                                document.write('<div class="board-cell aspect-square"></div>');
+                                            }
+                                        }
+                                    </script>
+                                </div>
+                                <p class="text-center text-sm text-gray-600">
+                                    الأسود يسيطر على الربع العلوي الأيسر، الأبيض على الربع العلوي الأيمن
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Terms Section -->
+        <section id="terms" class="guide-section mb-12">
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <h2 class="text-4xl font-bold text-purple-800 mb-6 text-center">
+                    <i class="fas fa-book ml-3"></i>مصطلحات مهمة
+                </h2>
+                
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="bg-purple-50 p-4 rounded-lg">
+                        <h4 class="font-bold text-purple-700 mb-2">الحرية (Liberty)</h4>
+                        <p class="text-sm text-gray-700">نقطة فارغة مجاورة لمجموعة أحجار</p>
+                    </div>
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <h4 class="font-bold text-blue-700 mb-2">العين (Eye)</h4>
+                        <p class="text-sm text-gray-700">مساحة فارغة محاطة تماماً بأحجار لون واحد</p>
+                    </div>
+                    <div class="bg-green-50 p-4 rounded-lg">
+                        <h4 class="font-bold text-green-700 mb-2">الكو (Ko)</h4>
+                        <p class="text-sm text-gray-700">قاعدة تمنع إعادة الحالة السابقة فوراً</p>
+                    </div>
+                    <div class="bg-red-50 p-4 rounded-lg">
+                        <h4 class="font-bold text-red-700 mb-2">أتاب (Atari)</h4>
+                        <p class="text-sm text-gray-700">تهديد باحتجاز مجموعة في الحركة القادمة</p>
+                    </div>
+                    <div class="bg-yellow-50 p-4 rounded-lg">
+                        <h4 class="font-bold text-yellow-700 mb-2">تسوجي (Tsugi)</h4>
+                        <p class="text-sm text-gray-700">ربط حجرين أو أكثر معاً</p>
+                    </div>
+                    <div class="bg-indigo-50 p-4 rounded-lg">
+                        <h4 class="font-bold text-indigo-700 mb-2">موي (Moyo)</h4>
+                        <p class="text-sm text-gray-700">مساحة كبيرة محتملة للسيطرة</p>
+                    </div>
+                    <div class="bg-pink-50 p-4 rounded-lg">
+                        <h4 class="font-bold text-pink-700 mb-2">ساباكي (Sabaki)</h4>
+                        <p class="text-sm text-gray-700">حركة ذكية للهروب من الضغط</p>
+                    </div>
+                    <div class="bg-teal-50 p-4 rounded-lg">
+                        <h4 class="font-bold text-teal-700 mb-2">جوسي (Joseki)</h4>
+                        <p class="text-sm text-gray-700">حركات مثالية في الزوايا</p>
+                    </div>
+                    <div class="bg-orange-50 p-4 rounded-lg">
+                        <h4 class="font-bold text-orange-700 mb-2">فوسيكي (Fuseki)</h4>
+                        <p class="text-sm text-gray-700">مرحلة افتتاحية اللعبة</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- FAQ Section -->
+        <section class="guide-section mb-12">
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <h2 class="text-4xl font-bold text-purple-800 mb-6 text-center">
+                    <i class="fas fa-question-circle ml-3"></i>أسئلة شائعة
+                </h2>
+                
+                <div class="space-y-4">
+                    <div class="border-b pb-4">
+                        <h3 class="text-xl font-bold text-purple-700 mb-2">
+                            كم تستمر لعبة جو عادة؟
+                        </h3>
+                        <p class="text-gray-700">
+                            تعتمد المدة على حجم اللوحة ومستوى اللاعبين. لعبة 9×9 قد تستغرق 15-30 دقيقة،
+                            بينما لعبة 19×19 قد تستغرق من ساعة إلى عدة ساعات.
+                        </p>
+                    </div>
+                    
+                    <div class="border-b pb-4">
+                        <h3 class="text-xl font-bold text-purple-700 mb-2">
+                            ما هو أفضل حجم لوحة للمبتدئين؟
+                        </h3>
+                        <p class="text-gray-700">
+                            حجم 9×9 هو الأفضل للمبتدئين لأنه أسرع وأبسط في الفهم. بعد إتقان القواعد،
+                            يمكن الانتقال إلى 13×13 ثم 19×19.
+                        </p>
+                    </div>
+                    
+                    <div class="border-b pb-4">
+                        <h3 class="text-xl font-bold text-purple-700 mb-2">
+                            كيف أعرف متى تنتهي اللعبة؟
+                        </h3>
+                        <p class="text-gray-700">
+                            تنتهي اللعبة عندما يمر كلا اللاعبين دوريهما متتالياً، مما يشير إلى عدم وجود
+                            حركات مفيدة أخرى. ثم يتم حساب النقاط.
+                        </p>
+                    </div>
+                    
+                    <div class="border-b pb-4">
+                        <h3 class="text-xl font-bold text-purple-700 mb-2">
+                            هل هناك فرق بين جو الصينية واليابانية؟
+                        </h3>
+                        <p class="text-gray-700">
+                            نعم، الاختلاف الرئيسي في طريقة حساب النقاط. الجو الصينية تحسب كل الأحجار
+                            والمساحات، بينما الجو اليابانية تحسب فقط المساحات المحتزة والأحجار المحصورة.
+                        </p>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-xl font-bold text-purple-700 mb-2">
+                            ما هي أفضل طريقة لتحسين مستواي في جو؟
+                        </h3>
+                        <p class="text-gray-700">
+                            الممارسة المنتظمة، حل المشاكل (Tsumego)، مشاهدة ألعاب اللاعبين المحترفين،
+                            وتحليل ألعابك بعد الانتهاء منها.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-8 px-4 mt-12">
+        <div class="container mx-auto text-center">
+            <div class="flex items-center justify-center mb-4">
+                <div class="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center ml-3">
+                    <i class="fas fa-circle text-white"></i>
+                </div>
+                <h3 class="text-2xl font-bold">بوركي جو BourkiGo</h3>
+            </div>
+            <p class="text-gray-400 mb-4">
+                دليل شامل لتعلم لعبة بوركي جو BourkiGo - لعبة الذكاء الاستراتيجية
+            </p>
+            <div class="flex justify-center space-x-6 space-x-reverse">
+                <a href="#" class="text-gray-400 hover:text-white transition">
+                    <i class="fab fa-facebook-f text-2xl"></i>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-white transition">
+                    <i class="fab fa-twitter text-2xl"></i>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-white transition">
+                    <i class="fab fa-instagram text-2xl"></i>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-white transition">
+                    <i class="fab fa-youtube text-2xl"></i>
+                </a>
+            </div>
+            <p class="text-gray-500 text-sm mt-6">
+                © 2025 بوركي جو BourkiGo. جميع الحقوق محفوظة.
+            </p>
+        </div>
+    </footer>
+    <script>
+        // Tab functionality
+        function showTab(tabId) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-purple-600', 'text-white');
+                btn.classList.add('bg-gray-300', 'text-gray-700');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabId).classList.add('active');
+            
+            // Update button styles
+            event.target.classList.remove('bg-gray-300', 'text-gray-700');
+            event.target.classList.add('bg-purple-600', 'text-white');
+        }
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        // Add intersection observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        // Observe all guide sections
+        document.querySelectorAll('.guide-section').forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(20px)';
+            section.style.transition = 'all 0.6s ease-out';
+            observer.observe(section);
+        });
+        // Add hover effects to strategy cards
+        document.querySelectorAll('.strategy-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body>
+</html>

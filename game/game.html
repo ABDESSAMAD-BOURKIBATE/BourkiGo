@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ألفا جو - صفحة اللعبة</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&display=swap');
+        
+        * {
+            font-family: 'Tajawal', sans-serif;
+        }
+        
+        .board-cell {
+            position: relative;
+            background: #f0e6d2;
+            border: 1px solid #d4c4a0;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .board-cell:hover {
+            background: #e8dcc0;
+        }
+        
+        .stone {
+            position: absolute;
+            width: 85%;
+            height: 85%;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            cursor: default;
+            transition: all 0.3s ease;
+        }
+        
+        .stone-black {
+            background: radial-gradient(circle at 30% 30%, #4a4a4a, #000);
+            box-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .stone-white {
+            background: radial-gradient(circle at 30% 30%, #fff, #e0e0e0);
+            box-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .stone-preview {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        
+        .captured-stone {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: inline-block;
+            margin: 2px;
+        }
+        
+        .timer-warning {
+            animation: pulse 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .game-mode-card {
+            transition: all 0.3s ease;
+        }
+        
+        .game-mode-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .game-mode-card.active {
+            border-color: #7c3aed;
+            background: #f3f0ff;
+        }
+        
+        .level-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .level-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .level-card.completed {
+            background: #dcfce7;
+            border-color: #16a34a;
+        }
+        
+        .level-card.current {
+            background: #fef3c7;
+            border-color: #f59e0b;
+        }
+        
+        .level-card.locked {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .settings-panel {
+            transition: all 0.5s ease;
+            overflow: hidden;
+        }
+        
+        .settings-panel.hidden {
+            max-height: 0;
+            opacity: 0;
+            padding: 0;
+        }
+        
+        .settings-panel.visible {
+            max-height: 1000px;
+            opacity: 1;
+        }
+        
+        .toggle-settings-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 40;
+            transition: all 0.3s ease;
+        }
+        
+        .toggle-settings-btn:hover {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-purple-50 to-blue-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-md py-4 px-6">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-4 space-x-reverse">
+                <div class="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center">
+                    <i class="fas fa-circle text-white text-2xl"></i>
+                </div>
+                    <h1 class="text-2xl font-bold text-purple-800">بوركي جو BourkiGo</h1>
+            </div>
+            <button onclick="goHome()" class="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-lg transition">
+                <i class="fas fa-home ml-2"></i>
+                الرئيسية
+            </button>
+        </div>
+    </header>
+
+    <div class="container mx-auto px-4 py-8">
+        <!-- Game Settings Panel -->
+        <div id="settingsPanel" class="settings-panel visible bg-white rounded-xl shadow-lg p-6 mb-8">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-purple-800">
+                    <i class="fas fa-cog ml-2"></i>
+                    إعدادات اللعبة
+                </h2>
+                <button onclick="toggleSettings()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-chevron-up text-2xl"></i>
+                </button>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Game Mode Selection -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-3">نمط اللعب</h3>
+                    <div class="space-y-3">
+                        <div onclick="setGameMode('single')" id="singleMode" class="game-mode-card border-2 border-gray-200 rounded-lg p-4 cursor-pointer">
+                            <div class="flex items-center">
+                                <i class="fas fa-user text-purple-600 text-xl ml-3"></i>
+                                <div>
+                                    <h4 class="font-semibold">لعب فردي</h4>
+                                    <p class="text-sm text-gray-600">ضد الكمبيوتر</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div onclick="setGameMode('two')" id="twoMode" class="game-mode-card border-2 border-gray-200 rounded-lg p-4 cursor-pointer">
+                            <div class="flex items-center">
+                                <i class="fas fa-users text-purple-600 text-xl ml-3"></i>
+                                <div>
+                                    <h4 class="font-semibold">لعب ثنائي</h4>
+                                    <p class="text-sm text-gray-600">لاعبان</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Level Selection (Single Player) -->
+                <div id="levelSelection" class="hidden">
+                    <h3 class="text-lg font-semibold mb-3">اختر المستوى</h3>
+                    <div class="grid grid-cols-2 gap-2 max-h-60 overflow-y-auto">
+                        <!-- Levels will be generated here -->
+                    </div>
+                </div>
+
+                <!-- Timer Settings -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-3">الوقت</h3>
+                    <div class="space-y-3">
+                        <label class="flex items-center cursor-pointer">
+                            <input type="checkbox" id="timerEnabled" onchange="toggleTimer()" class="ml-3 w-5 h-5 text-purple-600">
+                            <span>تفعيل المؤقت</span>
+                        </label>
+                        <div id="timerSettings" class="hidden">
+                            <label class="block mb-2">الوقت لكل لاعب (دقائق)</label>
+                            <select id="timeSelect" class="w-full p-2 border rounded-lg">
+                                <option value="5">5 دقائق</option>
+                                <option value="10" selected>10 دقائق</option>
+                                <option value="15">15 دقيقة</option>
+                                <option value="30">30 دقيقة</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Board Size -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-3">حجم اللوحة</h3>
+                    <select id="boardSize" onchange="changeBoardSize()" class="w-full p-2 border rounded-lg">
+                        <option value="9">9x9 (مبتدئ)</option>
+                        <option value="13">13x13 (متوسط)</option>
+                        <option value="19">19x19 (متقدم)</option>
+                    </select>
+                    
+                    <div class="mt-4 space-y-2">
+                        <button onclick="startNewGame()" class="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition">
+                            <i class="fas fa-play ml-2"></i>
+                            بدء لعبة جديدة
+                        </button>
+                        <button onclick="saveGame()" class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition">
+                            <i class="fas fa-save ml-2"></i>
+                            حفظ التقدم
+                        </button>
+                        <button onclick="loadGame()" class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
+                            <i class="fas fa-folder-open ml-2"></i>
+                            تحميل لعبة
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Relax Music Settings -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-3">صوت الاسترخاء</h3>
+                    <select id="relaxMusicSelect" class="w-full p-2 border rounded-lg mb-2" onchange="changeRelaxMusic()">
+                        <option value="../audio/music1.mp3">موسيقى هادئة 1</option>
+                        <option value="relax1.mp3">موسيقى هادئة 1</option>
+                        <option value="relax2.mp3">موسيقى هادئة 2</option>
+                        <option value="relax3.mp3">موسيقى هادئة 3</option>
+                    </select>
+                    <button onclick="toggleRelaxMusic()" id="relaxMusicBtn" class="w-full bg-teal-600 text-white py-2 rounded-lg hover:bg-teal-700 transition">
+                        <i class="fas fa-volume-mute ml-2"></i>
+                        إيقاف الصوت
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Board and Info -->
+        <div class="grid lg:grid-cols-3 gap-8">
+            <!-- Game Board -->
+            <div class="lg:col-span-2">
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <div id="gameBoard" class="relative mx-auto" style="max-width: 600px;">
+                        <!-- Board will be generated here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Game Info Panel -->
+            <div class="space-y-6">
+                <!-- Current Level (Single Player) -->
+                <div id="currentLevelInfo" class="bg-white rounded-xl shadow-lg p-6 hidden">
+                    <h3 class="text-xl font-bold text-purple-800 mb-4">المستوى الحالي</h3>
+                    <div class="text-center">
+                        <div class="text-4xl font-bold text-purple-600 mb-2" id="currentLevelDisplay">1</div>
+                        <p class="text-gray-600" id="levelDescription">مبتدئ</p>
+                        <div class="mt-4">
+                            <div class="bg-gray-200 rounded-full h-4 overflow-hidden">
+                                <div id="levelProgress" class="bg-purple-600 h-full transition-all duration-500" style="width: 0%"></div>
+                            </div>
+                            <p class="text-sm text-gray-600 mt-2">التقدم: <span id="progressText">0%</span></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Current Player -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="text-xl font-bold text-purple-800 mb-4">اللاعب الحالي</h3>
+                    <div id="currentPlayerInfo" class="flex items-center justify-center">
+                        <div class="text-center">
+                            <div id="currentPlayerStone" class="w-20 h-20 stone-black rounded-full mx-auto mb-3"></div>
+                            <p id="currentPlayerName" class="text-lg font-semibold">الأسود</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Timer -->
+                <div id="timerPanel" class="bg-white rounded-xl shadow-lg p-6 hidden">
+                    <h3 class="text-xl font-bold text-purple-800 mb-4">الوقت المتبقي</h3>
+                    <div class="space-y-4">
+                        <div class="text-center">
+                            <p class="text-sm text-gray-600 mb-1">اللاعب الأسود</p>
+                            <p id="blackTimer" class="text-3xl font-bold text-gray-800">10:00</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-sm text-gray-600 mb-1">اللاعب الأبيض</p>
+                            <p id="whiteTimer" class="text-3xl font-bold text-gray-800">10:00</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Captured Stones -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="text-xl font-bold text-purple-800 mb-4">الأحجار المحصورة</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <p class="text-sm text-gray-600 mb-2">أسود: <span id="blackCaptured">0</span></p>
+                            <div id="blackCapturedStones" class="min-h-[40px]"></div>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-600 mb-2">أبيض: <span id="whiteCaptured">0</span></p>
+                            <div id="whiteCapturedStones" class="min-h-[40px]"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Game Actions -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="text-xl font-bold text-purple-800 mb-4">إجراءات اللعبة</h3>
+                    <div class="space-y-3">
+                        <button onclick="passMove()" class="w-full bg-yellow-500 text-white py-2 rounded-lg hover:bg-yellow-600 transition">
+                            <i class="fas fa-forward ml-2"></i>
+                            تجاوز الدور
+                        </button>
+                        <button onclick="resignGame()" class="w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600 transition">
+                            <i class="fas fa-flag ml-2"></i>
+                            استسلام
+                        </button>
+                        <button onclick="undoMove()" class="w-full bg-gray-500 text-white py-2 rounded-lg hover:bg-gray-600 transition">
+                            <i class="fas fa-undo ml-2"></i>
+                            تراجع
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toggle Settings Button -->
+    <button onclick="toggleSettings()" class="toggle-settings-btn bg-purple-600 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center">
+        <i class="fas fa-cog text-2xl"></i>
+    </button>
+
+    <!-- Game Over Modal -->
+    <div id="gameOverModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-xl p-8 max-w-md mx-4">
+            <h2 class="text-3xl font-bold text-center mb-4">انتهت اللعبة!</h2>
+            <p id="gameResult" class="text-xl text-center mb-6"></p>
+            <div id="levelUpMessage" class="hidden text-center mb-4">
+                <div class="text-2xl mb-2">🎉</div>
+                <p class="text-green-600 font-bold">تهانينا! لقد رقيت إلى المستوى التالي!</p>
+            </div>
+            <div class="flex space-x-4 space-x-reverse">
+                <button onclick="closeGameOver()" class="flex-1 bg-gray-500 text-white py-2 rounded-lg hover:bg-gray-600 transition">
+                    إغلاق
+                </button>
+                <button onclick="startNewGame()" class="flex-1 bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition">
+                    لعبة جديدة
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- عنصر الصوت المخفي -->
+    <audio id="relaxAudio" src="../audio/music1.mp3" loop style="display:none"></audio>
+    <div id="audioErrorMsg" class="fixed top-20 left-1/2 transform -translate-x-1/2 bg-red-600 text-white px-6 py-3 rounded-lg shadow-lg z-50 hidden">تعذر تشغيل الصوت! تحقق من الملف أو إعدادات المتصفح.</div>
+
+    <script>
+        // Game State
+        let gameState = {
+            board: [],
+            currentPlayer: 'black',
+            gameMode: null,
+            boardSize: 9,
+            timerEnabled: false,
+            timeLimit: 600, // 10 minutes in seconds
+            blackTime: 600,
+            whiteTime: 600,
+            timerInterval: null,
+            blackCaptured: 0,
+            whiteCaptured: 0,
+            moveHistory: [],
+            gameActive: false,
+            lastMove: null,
+            koPoint: null,
+            currentLevel: 1,
+            maxLevel: 14,
+            levelProgress: 0,
+            completedLevels: []
+        };
+
+        // Level descriptions
+        const levelDescriptions = [
+            { name: "مبتدئ", description: "تعلم الأساسيات" },
+            { name: "مبتدئ+", description: "تحسين المهارات" },
+            { name: "متوسط 1", description: "استراتيجيات بسيطة" },
+            { name: "متوسط 2", description: "الدفاع والهجوم" },
+            { name: "متوسط 3", description: "التحكم في الزوايا" },
+            { name: "متوسط+", description: "تخطيط متقدم" },
+            { name: "متقدم 1", description: "استراتيجيات معقدة" },
+            { name: "متقدم 2", description: "التنبؤ بالحركات" },
+            { name: "متقدم 3", description: "السيطرة على المركز" },
+            { name: "خبير 1", description: "تكتيكات احترافية" },
+            { name: "خبير 2", description: "اللعب النفسي" },
+            { name: "خبير 3", description: "إدارة الوقت" },
+            { name: "أسطورة 1", description: "تحدي القواعد" },
+            { name: "أسطورة 2", description: "إتقان اللعبة" }
+        ];
+
+        // حالة صوت الاسترخاء
+        let relaxMusicPlaying = true;
+        let relaxAudio = null;
+
+        // Initialize game
+        function initGame() {
+            // Load saved game if exists
+            const savedGame = localStorage.getItem('alphaGoGame');
+            if (savedGame) {
+                const shouldLoad = confirm('هل تريد تحميل آخر لعبة محفوظة؟');
+                if (shouldLoad) {
+                    loadGameState(JSON.parse(savedGame));
+                    return;
+                }
+            }
+            
+            // Load level progress
+            const savedProgress = localStorage.getItem('alphaGoProgress');
+            if (savedProgress) {
+                const progress = JSON.parse(savedProgress);
+                gameState.currentLevel = progress.currentLevel || 1;
+                gameState.completedLevels = progress.completedLevels || [];
+            }
+            
+            // Set default game mode
+            setGameMode('single');
+            createBoard(9);
+            generateLevels();
+            
+            // تهيئة صوت الاسترخاء
+            relaxAudio = document.getElementById('relaxAudio');
+            relaxAudio.src = document.getElementById('relaxMusicSelect').value;
+            relaxAudio.volume = 0.5;
+            relaxMusicPlaying = true;
+            playRelaxMusic();
+        }
+
+        // Generate level cards
+        function generateLevels() {
+            const container = document.querySelector('#levelSelection .grid');
+            container.innerHTML = '';
+            
+            for (let i = 1; i <= gameState.maxLevel; i++) {
+                const levelCard = document.createElement('div');
+                const isCompleted = gameState.completedLevels.includes(i);
+                const isCurrent = i === gameState.currentLevel;
+                const isLocked = i > gameState.currentLevel && !isCompleted;
+                
+                levelCard.className = `level-card border-2 rounded-lg p-3 text-center ${
+                    isCompleted ? 'completed' : 
+                    isCurrent ? 'current' : 
+                    isLocked ? 'locked' : ''
+                }`;
+                
+                levelCard.innerHTML = `
+                    <div class="text-lg font-bold ${isLocked ? 'text-gray-400' : 'text-purple-600'}">${i}</div>
+                    <div class="text-xs mt-1 ${isLocked ? 'text-gray-400' : 'text-gray-600'}">${levelDescriptions[i-1].name}</div>
+                    ${isCompleted ? '<i class="fas fa-check-circle text-green-500"></i>' : ''}
+                    ${isLocked ? '<i class="fas fa-lock text-gray-400"></i>' : ''}
+                `;
+                
+                if (!isLocked) {
+                    levelCard.onclick = () => selectLevel(i);
+                }
+                
+                container.appendChild(levelCard);
+            }
+        }
+
+        // Select level
+        function selectLevel(level) {
+            gameState.currentLevel = level;
+            generateLevels();
+            updateLevelDisplay();
+            showMessage(`تم اختيار المستوى ${level}: ${levelDescriptions[level-1].name}`);
+        }
+
+        // Update level display
+        function updateLevelDisplay() {
+            document.getElementById('currentLevelDisplay').textContent = gameState.currentLevel;
+            document.getElementById('levelDescription').textContent = levelDescriptions[gameState.currentLevel-1].description;
+            updateLevelProgress();
+        }
+
+        // Update level progress
+        function updateLevelProgress() {
+            const progress = (gameState.levelProgress / 100) * 100;
+            document.getElementById('levelProgress').style.width = `${progress}%`;
+            document.getElementById('progressText').textContent = `${Math.round(progress)}%`;
+        }
+
+        // Toggle settings panel
+        function toggleSettings() {
+            const panel = document.getElementById('settingsPanel');
+            const icon = document.querySelector('.toggle-settings-btn i');
+            
+            if (panel.classList.contains('visible')) {
+                panel.classList.remove('visible');
+                panel.classList.add('hidden');
+                icon.className = 'fas fa-cog text-2xl';
+            } else {
+                panel.classList.remove('hidden');
+                panel.classList.add('visible');
+                icon.className = 'fas fa-times text-2xl';
+            }
+        }
+
+        // Set game mode
+        function setGameMode(mode) {
+            gameState.gameMode = mode;
+            
+            // Update UI
+            document.getElementById('singleMode').classList.toggle('active', mode === 'single');
+            document.getElementById('twoMode').classList.toggle('active', mode === 'two');
+            
+            // Show/hide level selection
+            document.getElementById('levelSelection').classList.toggle('hidden', mode !== 'single');
+            document.getElementById('currentLevelInfo').classList.toggle('hidden', mode !== 'single');
+            
+            if (mode === 'single') {
+                updateLevelDisplay();
+            }
+        }
+
+        // Toggle timer
+        function toggleTimer() {
+            const enabled = document.getElementById('timerEnabled').checked;
+            gameState.timerEnabled = enabled;
+            document.getElementById('timerSettings').classList.toggle('hidden', !enabled);
+            document.getElementById('timerPanel').classList.toggle('hidden', !enabled);
+            
+            if (enabled) {
+                const minutes = parseInt(document.getElementById('timeSelect').value);
+                gameState.timeLimit = minutes * 60;
+                gameState.blackTime = gameState.timeLimit;
+                gameState.whiteTime = gameState.timeLimit;
+                updateTimerDisplay();
+            }
+        }
+
+        // Change board size
+        function changeBoardSize() {
+            const size = parseInt(document.getElementById('boardSize').value);
+            gameState.boardSize = size;
+            createBoard(size);
+        }
+
+        // Create game board
+        function createBoard(size) {
+            const boardContainer = document.getElementById('gameBoard');
+            boardContainer.innerHTML = '';
+            
+            // Create grid
+            const grid = document.createElement('div');
+            grid.className = 'grid gap-0';
+            grid.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
+            
+            // Initialize board array
+            gameState.board = Array(size).fill(null).map(() => Array(size).fill(null));
+            
+            // Create cells
+            for (let i = 0; i < size; i++) {
+                for (let j = 0; j < size; j++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'board-cell';
+                    cell.style.aspectRatio = '1';
+                    cell.dataset.row = i;
+                    cell.dataset.col = j;
+                    
+                    cell.addEventListener('mouseenter', handleCellHover);
+                    cell.addEventListener('mouseleave', handleCellLeave);
+                    cell.addEventListener('click', handleCellClick);
+                    
+                    grid.appendChild(cell);
+                }
+            }
+            
+            boardContainer.appendChild(grid);
+        }
+
+        // Handle cell hover
+        function handleCellHover(e) {
+            if (!gameState.gameActive) return;
+            
+            const cell = e.target;
+            const row = parseInt(cell.dataset.row);
+            const col = parseInt(cell.dataset.col);
+            
+            if (gameState.board[row][col] === null) {
+                const preview = document.createElement('div');
+                preview.className = `stone stone-${gameState.currentPlayer} stone-preview`;
+                cell.appendChild(preview);
+            }
+        }
+
+        // Handle cell leave
+        function handleCellLeave(e) {
+            const preview = e.target.querySelector('.stone-preview');
+            if (preview) {
+                preview.remove();
+            }
+        }
+
+        // Handle cell click
+        function handleCellClick(e) {
+            if (!gameState.gameActive) return;
+            
+            const cell = e.target.closest('.board-cell');
+            const row = parseInt(cell.dataset.row);
+            const col = parseInt(cell.dataset.col);
+            
+            placeStone(row, col);
+        }
+
+        // Place stone
+        function placeStone(row, col) {
+            // Check if move is valid
+            if (gameState.board[row][col] !== null) return;
+            if (gameState.koPoint && gameState.koPoint.row === row && gameState.koPoint.col === col) {
+                showMessage('لا يمكنك اللعب في نقطة الكو!');
+                return;
+            }
+            
+            // Save move for undo
+            gameState.moveHistory.push({
+                board: gameState.board.map(row => [...row]),
+                captured: { black: gameState.blackCaptured, white: gameState.whiteCaptured },
+                koPoint: gameState.koPoint
+            });
+            
+            // Place stone
+            gameState.board[row][col] = gameState.currentPlayer;
+            gameState.lastMove = { row, col };
+            
+            // Update UI
+            const cell = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+            const stone = document.createElement('div');
+            stone.className = `stone stone-${gameState.currentPlayer}`;
+            cell.appendChild(stone);
+            
+            // Check for captures
+            const capturedStones = checkCaptures(row, col);
+            
+            // Check for suicide
+            if (isSuicide(row, col) && capturedStones.length === 0) {
+                // Undo move
+                gameState.board[row][col] = null;
+                stone.remove();
+                gameState.moveHistory.pop();
+                showMessage('حركة غير صالحة!');
+                return;
+            }
+            
+            // Update ko point
+            if (capturedStones.length === 1) {
+                const captured = capturedStones[0];
+                gameState.koPoint = captured;
+            } else {
+                gameState.koPoint = null;
+            }
+            
+            // Update level progress for single player
+            if (gameState.gameMode === 'single' && gameState.currentPlayer === 'black') {
+                gameState.levelProgress = Math.min(100, gameState.levelProgress + 10);
+                updateLevelProgress();
+            }
+            
+            // Switch player
+            switchPlayer();
+            
+            // AI move if single player
+            if (gameState.gameMode === 'single' && gameState.currentPlayer === 'white' && gameState.gameActive) {
+                setTimeout(makeAIMove, 500);
+            }
+        }
+
+        // Check for captures
+        function checkCaptures(row, col) {
+            const opponent = gameState.currentPlayer === 'black' ? 'white' : 'black';
+            const captured = [];
+            
+            // Check adjacent groups
+            const directions = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+            
+            for (const [dr, dc] of directions) {
+                const newRow = row + dr;
+                const newCol = col + dc;
+                
+                if (isValidPosition(newRow, newCol) && gameState.board[newRow][newCol] === opponent) {
+                    const group = getGroup(newRow, newCol);
+                    if (!hasLiberties(group)) {
+                        captured.push(...group);
+                        captureGroup(group);
+                    }
+                }
+            }
+            
+            return captured;
+        }
+
+        // Get group of connected stones
+        function getGroup(row, col) {
+            const color = gameState.board[row][col];
+            const group = [];
+            const visited = new Set();
+            const stack = [[row, col]];
+            
+            while (stack.length > 0) {
+                const [r, c] = stack.pop();
+                const key = `${r},${c}`;
+                
+                if (visited.has(key)) continue;
+                visited.add(key);
+                
+                if (gameState.board[r][c] === color) {
+                    group.push({ row: r, col: c });
+                    
+                    const directions = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+                    for (const [dr, dc] of directions) {
+                        const newRow = r + dr;
+                        const newCol = c + dc;
+                        if (isValidPosition(newRow, newCol)) {
+                            stack.push([newRow, newCol]);
+                        }
+                    }
+                }
+            }
+            
+            return group;
+        }
+
+        // Check if group has liberties
+        function hasLiberties(group) {
+            const directions = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+            
+            for (const stone of group) {
+                for (const [dr, dc] of directions) {
+                    const newRow = stone.row + dr;
+                    const newCol = stone.col + dc;
+                    
+                    if (isValidPosition(newRow, newCol) && gameState.board[newRow][newCol] === null) {
+                        return true;
+                    }
+                }
+            }
+            
+            return false;
+        }
+
+        // Capture group
+        function captureGroup(group) {
+            const color = gameState.board[group[0].row][group[0].col];
+            
+            for (const stone of group) {
+                gameState.board[stone.row][stone.col] = null;
+                const cell = document.querySelector(`[data-row="${stone.row}"][data-col="${stone.col}"]`);
+                const stoneElement = cell.querySelector('.stone');
+                if (stoneElement) {
+                    stoneElement.remove();
+                }
+                
+                // Update captured count
+                if (color === 'black') {
+                    gameState.whiteCaptured++;
+                    addCapturedStone('white');
+                } else {
+                    gameState.blackCaptured++;
+                    addCapturedStone('black');
+                }
+            }
+            
+            updateCapturedDisplay();
+        }
+
+        // Check if move is suicide
+        function isSuicide(row, col) {
+            const group = getGroup(row, col);
+            return !hasLiberties(group);
+        }
+
+        // Check if position is valid
+        function isValidPosition(row, col) {
+            return row >= 0 && row < gameState.boardSize && col >= 0 && col < gameState.boardSize;
+        }
+
+        // Switch player
+        function switchPlayer() {
+            gameState.currentPlayer = gameState.currentPlayer === 'black' ? 'white' : 'black';
+            updateCurrentPlayerDisplay();
+        }
+
+        // Update current player display
+        function updateCurrentPlayerDisplay() {
+            const stone = document.getElementById('currentPlayerStone');
+            const name = document.getElementById('currentPlayerName');
+            
+            stone.className = `w-20 h-20 stone-${gameState.currentPlayer} rounded-full mx-auto mb-3`;
+            name.textContent = gameState.currentPlayer === 'black' ? 'الأسود' : 'الأبيض';
+        }
+
+        // Add captured stone to display
+        function addCapturedStone(color) {
+            const container = document.getElementById(`${color}CapturedStones`);
+            const stone = document.createElement('div');
+            stone.className = `captured-stone stone-${color}`;
+            container.appendChild(stone);
+        }
+
+        // Update captured display
+        function updateCapturedDisplay() {
+            document.getElementById('blackCaptured').textContent = gameState.blackCaptured;
+            document.getElementById('whiteCaptured').textContent = gameState.whiteCaptured;
+        }
+
+        // AI Move with difficulty levels
+        function makeAIMove() {
+            const emptyCells = [];
+            
+            for (let i = 0; i < gameState.boardSize; i++) {
+                for (let j = 0; j < gameState.boardSize; j++) {
+                    if (gameState.board[i][j] === null) {
+                        emptyCells.push({ row: i, col: j });
+                    }
+                }
+            }
+            
+            if (emptyCells.length === 0) return;
+            
+            let selectedMove;
+            
+            // Adjust AI behavior based on level
+            if (gameState.currentLevel <= 3) {
+                // Levels 1-3: Random moves
+                selectedMove = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+            } else if (gameState.currentLevel <= 7) {
+                // Levels 4-7: Try to capture
+                selectedMove = findCaptureMove(emptyCells) || getRandomMove(emptyCells);
+            } else if (gameState.currentLevel <= 11) {
+                // Levels 8-11: Try to capture and defend
+                selectedMove = findCaptureMove(emptyCells) || findDefenseMove(emptyCells) || getRandomMove(emptyCells);
+            } else {
+                // Levels 12-14: Strategic moves
+                selectedMove = findStrategicMove(emptyCells) || findCaptureMove(emptyCells) || findDefenseMove(emptyCells) || getRandomMove(emptyCells);
+            }
+            
+            // Add some randomness based on level
+            if (Math.random() < (15 - gameState.currentLevel) * 0.05) {
+                selectedMove = getRandomMove(emptyCells);
+            }
+            
+            placeStone(selectedMove.row, selectedMove.col);
+        }
+
+        // Find capture move
+        function findCaptureMove(emptyCells) {
+            for (const move of emptyCells) {
+                // Simulate move
+                gameState.board[move.row][move.col] = 'white';
+                const captured = checkCaptures(move.row, move.col);
+                gameState.board[move.row][move.col] = null;
+                
+                if (captured.length > 0) {
+                    return move;
+                }
+            }
+            return null;
+        }
+
+        // Find defense move
+        function findDefenseMove(emptyCells) {
+            for (const move of emptyCells) {
+                // Check if this move saves a group
+                gameState.board[move.row][move.col] = 'white';
+                const group = getGroup(move.row, move.col);
+                const hasLiberty = hasLiberties(group);
+                gameState.board[move.row][move.col] = null;
+                
+                if (!hasLiberty) {
+                    // This move would save the group
+                    return move;
+                }
+            }
+            return null;
+        }
+
+        // Find strategic move
+        function findStrategicMove(emptyCells) {
+            // Prefer corners and edges in early game
+            const corners = emptyCells.filter(move => 
+                (move.row === 0 || move.row === gameState.boardSize - 1) &&
+                (move.col === 0 || move.col === gameState.boardSize - 1)
+            );
+            
+            const edges = emptyCells.filter(move => 
+                (move.row === 0 || move.row === gameState.boardSize - 1 ||
+                 move.col === 0 || move.col === gameState.boardSize - 1) &&
+                !corners.includes(move)
+            );
+            
+            if (corners.length > 0 && Math.random() < 0.7) {
+                return corners[Math.floor(Math.random() * corners.length)];
+            }
+            
+            if (edges.length > 0 && Math.random() < 0.5) {
+                return edges[Math.floor(Math.random() * edges.length)];
+            }
+            
+            return null;
+        }
+
+        // Get random move
+        function getRandomMove(emptyCells) {
+            return emptyCells[Math.floor(Math.random() * emptyCells.length)];
+        }
+
+        // Pass move
+        function passMove() {
+            if (!gameState.gameActive) return;
+            
+            showMessage(`${gameState.currentPlayer === 'black' ? 'الأسود' : 'الأبيض'} تجاوز الدور`);
+            switchPlayer();
+            
+            // Check if both players passed
+            if (gameState.moveHistory.length > 0 && gameState.moveHistory[gameState.moveHistory.length - 1].pass) {
+                endGame();
+            }
+            
+            // Save pass in history
+            gameState.moveHistory.push({ pass: true });
+        }
+
+        // Resign game
+        function resignGame() {
+            if (!gameState.gameActive) return;
+            
+            const winner = gameState.currentPlayer === 'black' ? 'الأبيض' : 'الأسود';
+            endGame(`استسلم ${gameState.currentPlayer === 'black' ? 'الأسود' : 'الأبيض'}! الفائز هو ${winner}`);
+        }
+
+        // Undo move
+        function undoMove() {
+            if (gameState.moveHistory.length === 0 || !gameState.gameActive) return;
+            
+            const lastState = gameState.moveHistory.pop();
+            gameState.board = lastState.board;
+            gameState.blackCaptured = lastState.captured.black;
+            gameState.whiteCaptured = lastState.captured.white;
+            gameState.koPoint = lastState.koPoint;
+            
+            // Redraw board
+            redrawBoard();
+            updateCapturedDisplay();
+            switchPlayer();
+        }
+
+        // Redraw board
+        function redrawBoard() {
+            for (let i = 0; i < gameState.boardSize; i++) {
+                for (let j = 0; j < gameState.boardSize; j++) {
+                    const cell = document.querySelector(`[data-row="${i}"][data-col="${j}"]`);
+                    const stone = cell.querySelector('.stone:not(.stone-preview)');
+                    if (stone) {
+                        stone.remove();
+                    }
+                    
+                    if (gameState.board[i][j]) {
+                        const newStone = document.createElement('div');
+                        newStone.className = `stone stone-${gameState.board[i][j]}`;
+                        cell.appendChild(newStone);
+                    }
+                }
+            }
+        }
+
+        // Start new game
+        function startNewGame() {
+            // Reset game state
+            gameState.currentPlayer = 'black';
+            gameState.blackCaptured = 0;
+            gameState.whiteCaptured = 0;
+            gameState.moveHistory = [];
+            gameState.gameActive = true;
+            gameState.lastMove = null;
+            gameState.koPoint = null;
+            gameState.levelProgress = 0;
+            
+            // Reset timer
+            if (gameState.timerEnabled) {
+                gameState.blackTime = gameState.timeLimit;
+                gameState.whiteTime = gameState.timeLimit;
+                updateTimerDisplay();
+                startTimer();
+            }
+            
+            // Clear board
+            createBoard(gameState.boardSize);
+            updateCurrentPlayerDisplay();
+            updateCapturedDisplay();
+            updateLevelProgress();
+            
+            // Clear captured stones display
+            document.getElementById('blackCapturedStones').innerHTML = '';
+            document.getElementById('whiteCapturedStones').innerHTML = '';
+            
+            // تشغيل صوت الاسترخاء تلقائيًا
+            playRelaxMusic();
+            
+            showMessage('بدأت لعبة جديدة!');
+        }
+
+        // Timer functions
+        function startTimer() {
+            if (gameState.timerInterval) {
+                clearInterval(gameState.timerInterval);
+            }
+            
+            gameState.timerInterval = setInterval(() => {
+                if (gameState.currentPlayer === 'black') {
+                    gameState.blackTime--;
+                    if (gameState.blackTime <= 0) {
+                        endGame('انتهى وقت اللاعب الأسود! الفائز هو الأبيض');
+                        return;
+                    }
+                } else {
+                    gameState.whiteTime--;
+                    if (gameState.whiteTime <= 0) {
+                        endGame('انتهى وقت اللاعب الأبيض! الفائز هو الأسود');
+                        return;
+                    }
+                }
+                
+                updateTimerDisplay();
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const blackTimer = document.getElementById('blackTimer');
+            const whiteTimer = document.getElementById('whiteTimer');
+            
+            blackTimer.textContent = formatTime(gameState.blackTime);
+            whiteTimer.textContent = formatTime(gameState.whiteTime);
+            
+            // Add warning class if time is low
+            blackTimer.classList.toggle('timer-warning', gameState.blackTime <= 60);
+            whiteTimer.classList.toggle('timer-warning', gameState.whiteTime <= 60);
+        }
+
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        // Save game
+        function saveGame() {
+            const gameData = {
+                ...gameState,
+                timestamp: new Date().toISOString()
+            };
+            
+            localStorage.setItem('alphaGoGame', JSON.stringify(gameData));
+            
+            // Save level progress
+            const progress = {
+                currentLevel: gameState.currentLevel,
+                completedLevels: gameState.completedLevels
+            };
+            localStorage.setItem('alphaGoProgress', JSON.stringify(progress));
+            
+            showMessage('تم حفظ اللعبة والتقدم بنجاح!');
+        }
+
+        // Load game
+        function loadGame() {
+            const savedGame = localStorage.getItem('alphaGoGame');
+            if (savedGame) {
+                loadGameState(JSON.parse(savedGame));
+                showMessage('تم تحميل اللعبة بنجاح!');
+            } else {
+                showMessage('لا توجد لعبة محفوظة!');
+            }
+        }
+
+        // Load game state
+        function loadGameState(state) {
+            gameState = { ...state };
+            
+            // Update UI
+            document.getElementById('boardSize').value = gameState.boardSize;
+            document.getElementById('timerEnabled').checked = gameState.timerEnabled;
+            toggleTimer();
+            
+            if (gameState.timerEnabled) {
+                document.getElementById('timeSelect').value = gameState.timeLimit / 60;
+            }
+            
+            setGameMode(gameState.gameMode);
+            createBoard(gameState.boardSize);
+            redrawBoard();
+            updateCurrentPlayerDisplay();
+            updateCapturedDisplay();
+            updateLevelDisplay();
+            
+            // Restore captured stones display
+            for (let i = 0; i < gameState.blackCaptured; i++) {
+                addCapturedStone('black');
+            }
+            for (let i = 0; i < gameState.whiteCaptured; i++) {
+                addCapturedStone('white');
+            }
+            
+            if (gameState.timerEnabled) {
+                updateTimerDisplay();
+                if (gameState.gameActive) {
+                    startTimer();
+                }
+            }
+        }
+
+        // End game
+        function endGame(message = null) {
+            gameState.gameActive = false;
+            
+            if (gameState.timerInterval) {
+                clearInterval(gameState.timerInterval);
+            }
+            
+            // Calculate winner
+            if (!message) {
+                const blackScore = calculateScore('black');
+                const whiteScore = calculateScore('white');
+                
+                if (blackScore > whiteScore) {
+                    message = `انتهت اللعبة! الفائز هو الأسود (${blackScore} - ${whiteScore})`;
+                    
+                    // Check if player won and advance level
+                    if (gameState.gameMode === 'single' && gameState.currentLevel < gameState.maxLevel) {
+                        gameState.currentLevel++;
+                        if (!gameState.completedLevels.includes(gameState.currentLevel - 1)) {
+                            gameState.completedLevels.push(gameState.currentLevel - 1);
+                        }
+                        document.getElementById('levelUpMessage').classList.remove('hidden');
+                        generateLevels();
+                        saveGame();
+                    }
+                } else if (whiteScore > blackScore) {
+                    message = `انتهت اللعبة! الفائز هو الأبيض (${whiteScore} - ${blackScore})`;
+                } else {
+                    message = `انتهت اللعبة بالتعادل (${blackScore} - ${whiteScore})`;
+                }
+            }
+            
+            // Show game over modal
+            document.getElementById('gameResult').textContent = message;
+            document.getElementById('gameOverModal').classList.remove('hidden');
+            document.getElementById('gameOverModal').classList.add('flex');
+        }
+
+        // Calculate score (simplified)
+        function calculateScore(color) {
+            let score = 0;
+            
+            // Count stones
+            for (let i = 0; i < gameState.boardSize; i++) {
+                for (let j = 0; j < gameState.boardSize; j++) {
+                    if (gameState.board[i][j] === color) {
+                        score++;
+                    }
+                }
+            }
+            
+            // Add captured stones
+            if (color === 'black') {
+                score += gameState.blackCaptured;
+            } else {
+                score += gameState.whiteCaptured;
+            }
+            
+            return score;
+        }
+
+        // Close game over modal
+        function closeGameOver() {
+            document.getElementById('gameOverModal').classList.add('hidden');
+            document.getElementById('gameOverModal').classList.remove('flex');
+            document.getElementById('levelUpMessage').classList.add('hidden');
+        }
+
+        // Show message
+        function showMessage(message) {
+            // Create toast notification
+            const toast = document.createElement('div');
+            toast.className = 'fixed top-4 left-1/2 transform -translate-x-1/2 bg-purple-600 text-white px-6 py-3 rounded-lg shadow-lg z-50';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+
+        // Go home
+        function goHome() {
+            if (gameState.gameActive) {
+                const shouldLeave = confirm('هل تريد المغادرة؟ سيتم حفظ تقدم اللعبة الحالية.');
+                if (shouldLeave) {
+                    saveGame();
+                    window.location.href = '../BourkiGo.html';
+                }
+            } else {
+                window.location.href = '../BourkiGo.html';
+            }
+        }
+
+        // تشغيل صوت الاسترخاء
+        function playRelaxMusic() {
+            if (!relaxAudio) relaxAudio = document.getElementById('relaxAudio');
+            if (relaxMusicPlaying) {
+                relaxAudio.play().then(() => {
+                    document.getElementById('audioErrorMsg').classList.add('hidden');
+                    document.getElementById('relaxMusicBtn').innerHTML = '<i class="fas fa-volume-mute ml-2"></i> إيقاف الصوت';
+                }).catch((e) => {
+                    document.getElementById('audioErrorMsg').classList.remove('hidden');
+                });
+            }
+            relaxAudio.onerror = function() {
+                document.getElementById('audioErrorMsg').classList.remove('hidden');
+            };
+        }
+
+        // إيقاف/تشغيل صوت الاسترخاء
+        function toggleRelaxMusic() {
+            if (!relaxAudio) relaxAudio = document.getElementById('relaxAudio');
+            if (relaxMusicPlaying) {
+                relaxAudio.pause();
+                relaxMusicPlaying = false;
+                document.getElementById('relaxMusicBtn').innerHTML = '<i class="fas fa-volume-up ml-2"></i> تشغيل الصوت';
+            } else {
+                relaxAudio.play();
+                relaxMusicPlaying = true;
+                document.getElementById('relaxMusicBtn').innerHTML = '<i class="fas fa-volume-mute ml-2"></i> إيقاف الصوت';
+            }
+        }
+
+        // تغيير الأغنية
+        function changeRelaxMusic() {
+            if (!relaxAudio) relaxAudio = document.getElementById('relaxAudio');
+            relaxAudio.src = document.getElementById('relaxMusicSelect').value;
+            relaxAudio.load();
+            if (relaxMusicPlaying) {
+                relaxAudio.play().then(() => {
+                    document.getElementById('audioErrorMsg').classList.add('hidden');
+                }).catch(() => {
+                    document.getElementById('audioErrorMsg').classList.remove('hidden');
+                });
+            }
+            relaxAudio.onerror = function() {
+                document.getElementById('audioErrorMsg').classList.remove('hidden');
+            };
+        }
+
+        // زر إيقاف الصوت بشكل صريح
+        function stopRelaxMusic() {
+            if (!relaxAudio) relaxAudio = document.getElementById('relaxAudio');
+            relaxAudio.pause();
+            relaxMusicPlaying = false;
+            document.getElementById('relaxMusicBtn').innerHTML = '<i class="fas fa-play ml-2"></i> تشغيل الصوت';
+        }
+
+        // Initialize on load
+        window.addEventListener('load', initGame);
+        
+        // Save game before unload
+        window.addEventListener('beforeunload', () => {
+            if (gameState.gameActive) {
+                saveGame();
+            }
+        });
+    </script>
+</body>
+</html>

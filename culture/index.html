@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>القسم الثقافي - تاريخ وثقافة لعبة جو</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&display=swap');
+        
+        * {
+            font-family: 'Tajawal', sans-serif;
+        }
+        
+        .timeline-line {
+            background: linear-gradient(to bottom, #7c3aed, #a855f7);
+            width: 4px;
+            position: absolute;
+            right: 50%;
+            transform: translateX(50%);
+            top: 0;
+            bottom: 0;
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding: 20px 0;
+        }
+        
+        .timeline-item:nth-child(odd) .timeline-content {
+            margin-right: 55%;
+            padding-right: 30px;
+            text-align: right;
+        }
+        
+        .timeline-item:nth-child(even) .timeline-content {
+            margin-left: 55%;
+            padding-left: 30px;
+            text-align: left;
+        }
+        
+        .timeline-dot {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #7c3aed;
+            border: 4px solid white;
+            border-radius: 50%;
+            right: 50%;
+            top: 30px;
+            transform: translateX(50%);
+            box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.2);
+        }
+        
+        .country-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .country-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .champion-card {
+            transition: all 0.3s ease;
+        }
+        
+        .champion-card:hover {
+            transform: scale(1.05);
+        }
+        
+        .evolution-table td {
+            vertical-align: middle;
+        }
+        
+        .era-badge {
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            background: #7c3aed;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+        
+        .cultural-section {
+            scroll-margin-top: 100px;
+        }
+        
+        .image-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .gallery-item:hover {
+            transform: scale(1.05);
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: all 0.3s ease;
+        }
+        
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+        
+        .gallery-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            color: white;
+            padding: 20px;
+            transform: translateY(100%);
+            transition: all 0.3s ease;
+        }
+        
+        .gallery-item:hover .gallery-overlay {
+            transform: translateY(0);
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .float-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-purple-50 to-blue-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-md sticky top-0 z-40">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4 space-x-reverse">
+                    <div class="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center">
+                        <i class="fas fa-circle text-white text-2xl"></i>
+                    </div>
+                    <h1 class="text-2xl font-bold text-purple-800">القسم الثقافي</h1>
+                </div>
+                <nav class="hidden md:flex space-x-6 space-x-reverse">
+                        <!-- أزرار التنقل أزيلت حسب طلب المستخدم -->
+                        <a href="/BourkiGo.html" class="hidden md:flex items-center bg-purple-600 text-white px-4 py-2 rounded-full shadow hover:bg-purple-700 transition">
+                            <i class="fas fa-home mr-2"></i> الرئيسية
+                        </a>
+                </nav>
+                    <!-- زر الرئيسية للجوال -->
+                    <a href="/BourkiGo.html" class="md:hidden flex items-center bg-purple-600 text-white px-4 py-2 rounded-full shadow hover:bg-purple-700 transition ml-2">
+                        <i class="fas fa-home mr-2"></i> الرئيسية
+                    </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-r from-purple-600 to-blue-600 text-white py-20">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-5xl font-bold mb-6 float-animation">
+                رحلة عبر تاريخ وثقافة لعبة بوركي جو BourkiGo
+            </h2>
+            <p class="text-xl mb-8 max-w-3xl mx-auto">
+                اكتشف الألفي عام من التاريخ الغني للعبة جو عبر الصين واليابان وكوريا،
+                وتعرف على أبطالها وبطولاتها الشهيرة، وتطور معداتها عبر العصور
+            </p>
+            <div class="flex justify-center space-x-4 space-x-reverse">
+                <a href="#history" class="bg-white text-purple-600 px-8 py-3 rounded-full font-bold hover:bg-gray-100 transition">
+                    <i class="fas fa-history ml-2"></i>
+                    ابدأ الرحلة
+                </a>
+                <a href="#gallery" class="border-2 border-white text-white px-8 py-3 rounded-full font-bold hover:bg-white hover:text-purple-600 transition">
+                    <i class="fas fa-images ml-2"></i>
+                    معرض الصور
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <div class="container mx-auto px-4 py-8">
+        <!-- History Section -->
+        <section id="history" class="cultural-section mb-16">
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <h2 class="text-4xl font-bold text-purple-800 mb-8 text-center">
+                    <i class="fas fa-globe-asia ml-3"></i>تاريخ اللعبة عبر الحضارات
+                </h2>
+                
+                <!-- Country Cards -->
+                <div class="grid md:grid-cols-3 gap-8 mb-12">
+                    <!-- China -->
+                    <div class="country-card bg-gradient-to-br from-red-50 to-red-100 rounded-xl p-6 relative">
+                        <div class="era-badge">الأصل</div>
+                        <div class="text-center mb-4">
+                            <i class="fas fa-dragon text-6xl text-red-600"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-red-800 mb-4 text-center">الصين</h3>
+                        <p class="text-gray-700 mb-4">
+                            موطن اللعبة الأصلي حيث نشأت قبل أكثر من 2500 عام في عهد أسرة زو.
+                            عُرفت باسم "وي تشي" (圍棋) وتعتبر من أربع الفنون التقليدية الصينية.
+                        </p>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex items-center">
+                                <i class="fas fa-calendar-alt text-red-600 ml-2"></i>
+                                <span>نشأت: 2000-1000 ق.م</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-crown text-red-600 ml-2"></i>
+                                <span>الاسم التقليدي: وي تشي</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-users text-red-600 ml-2"></i>
+                                <span>عدد اللاعبين: 60+ مليون</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Japan -->
+                    <div class="country-card bg-gradient-to-br from-pink-50 to-pink-100 rounded-xl p-6 relative">
+                        <div class="era-badge">التطوير</div>
+                        <div class="text-center mb-4">
+                            <i class="fas fa-torii-gate text-6xl text-pink-600"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-pink-800 mb-4 text-center">اليابان</h3>
+                        <p class="text-gray-700 mb-4">
+                            انتقلت اللعبة إلى اليابان في القرن السابع الميلادي. طورت اليابان اللعبة
+                            وأنشأت نظام الدان (Dan) والكايو (Kyu) لتحديد مستويات اللاعبين.
+                        </p>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex items-center">
+                                <i class="fas fa-calendar-alt text-pink-600 ml-2"></i>
+                                <span>الوصول: القرن 7 م</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-crown text-pink-600 ml-2"></i>
+                                <span>الاسم: إيغو (囲碁)</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-graduation-cap text-pink-600 ml-2"></i>
+                                <span>أول مدرسة: هوين إن</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Korea -->
+                    <div class="country-card bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 relative">
+                        <div class="era-badge">العصر الحديث</div>
+                        <div class="text-center mb-4">
+                            <i class="fas fa-yin-yang text-6xl text-blue-600"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-blue-800 mb-4 text-center">كوريا</h3>
+                        <p class="text-gray-700 mb-4">
+                            عرفت كوريا اللعبة منذ العصور القديمة، لكنها شهدت نهضة كبيرة في القرن العشرين.
+                            تتميز كوريا بأقوى لاعبي جو في العالم حالياً.
+                        </p>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex items-center">
+                                <i class="fas fa-calendar-alt text-blue-600 ml-2"></i>
+                                <span>النهضة: القرن 20</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-crown text-blue-600 ml-2"></i>
+                                <span>الاسم: بادوك (바둑)</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-trophy text-blue-600 ml-2"></i>
+                                <span>أبطال عالميون: 9 دان</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Timeline -->
+                <h3 class="text-2xl font-bold text-purple-700 mb-6">الخط الزمني لتطور اللعبة</h3>
+                <div class="relative">
+                    <div class="timeline-line"></div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="bg-purple-100 p-4 rounded-lg">
+                                <h4 class="font-bold text-purple-800">2000-1000 ق.م</h4>
+                                <p class="text-gray-700">نشأة اللعبة في الصين خلال عهد أسرة زو</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="bg-blue-100 p-4 rounded-lg">
+                                <h4 class="font-bold text-blue-800">القرن 7 م</h4>
+                                <p class="text-gray-700">وصول اللعبة إلى اليابان عبر الرهبان البوذيين</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="bg-pink-100 p-4 rounded-lg">
+                                <h4 class="font-bold text-pink-800">1603-1868</h4>
+                                <p class="text-gray-700">العصر الذهبي للعبة في اليابان - تأسيس المدارس الأربع</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="bg-green-100 p-4 rounded-lg">
+                                <h4 class="font-bold text-green-800">1935</h4>
+                                <p class="text-gray-700">تأسيس الاتحاد الياباني للعبة جو</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="bg-yellow-100 p-4 rounded-lg">
+                                <h4 class="font-bold text-yellow-800">1955</h4>
+                                <p class="text-gray-700">تأسيس الاتحاد الكوري للعبة جو - بداية النهضة الكورية</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="bg-red-100 p-4 rounded-lg">
+                                <h4 class="font-bold text-red-800">1982</h4>
+                                <p class="text-gray-700">أول بطولة عالمية للعبة جو - إنجفست</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="bg-indigo-100 p-4 rounded-lg">
+                                <h4 class="font-bold text-indigo-800">2016</h4>
+                                <p class="text-gray-700">انتصار ألفا جو على لي سيدول - ثورة الذكاء الاصطناعي</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Champions Section -->
+        <section id="champions" class="cultural-section mb-16">
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <h2 class="text-4xl font-bold text-purple-800 mb-8 text-center">
+                    <i class="fas fa-trophy ml-3"></i>أبطال اللعبة عبر التاريخ
+                </h2>
+                
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Honinbo Sansa -->
+                    <div class="champion-card bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg p-6 text-center">
+                        <img src="../images/Sansa.jpg" alt="هونينبو سانسا" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover">
+                        <h3 class="text-xl font-bold text-purple-800 mb-2">هونينبو سانسا</h3>
+                        <p class="text-sm text-gray-600 mb-3">اليابان (1559-1623)</p>
+                        <p class="text-sm text-gray-700">
+                            مؤسس مدرسة هونينبو وأعظم لاعب في عصره. أول من حصل على لقب "مياجينو" (اللاعب الإلهي).
+                        </p>
+                        <div class="mt-3">
+                            <span class="bg-purple-600 text-white text-xs px-2 py-1 rounded">أسطورة</span>
+                        </div>
+                    </div>
+
+                    <!-- Go Seigen -->
+                    <div class="champion-card bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-6 text-center">
+                        <img src="../images/250px-Go_Seigen_01.jpg" alt="غو سيغن" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover">
+                        <h3 class="text-xl font-bold text-blue-800 mb-2">غو سيغن</h3>
+                        <p class="text-sm text-gray-600 mb-3">الصين (1914-2014)</p>
+                        <p class="text-sm text-gray-700">
+                            يعتبر أعظم لاعب في القرن العشرين. ثورة في أساليب اللعب وأسس "الجديد في جو".
+                        </p>
+                        <div class="mt-3">
+                            <span class="bg-blue-600 text-white text-xs px-2 py-1 rounded">عبقري</span>
+                        </div>
+                    </div>
+
+                    <!-- Cho Chikun -->
+                    <div class="champion-card bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-6 text-center">
+                        <img src="../images/Cho_Chikun_at_World_Go_Festival20190630.jpg" alt="تشو تشيكون" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover">
+                        <h3 class="text-xl font-bold text-green-800 mb-2">تشو تشيكون</h3>
+                        <p class="text-sm text-gray-600 mb-3">كوريا (1956-)</p>
+                        <p class="text-sm text-gray-700">
+                            أحد أعظم اللاعبين الكوريين. فاز بـ 71 لقباً محلياً ودولياً.
+                        </p>
+                        <div class="mt-3">
+                            <span class="bg-green-600 text-white text-xs px-2 py-1 rounded">بطل</span>
+                        </div>
+                    </div>
+
+                    <!-- Lee Changho -->
+                    <div class="champion-card bg-gradient-to-br from-red-50 to-red-100 rounded-lg p-6 text-center">
+                        <img src="../images/Lee_ChangHo.JPG" alt="لي تشانغ هو" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover">
+                        <h3 class="text-xl font-bold text-red-800 mb-2">لي تشانغ هو</h3>
+                        <p class="text-sm text-gray-600 mb-3">كوريا (1975-)</p>
+                        <p class="text-sm text-gray-700">
+                            "العملاق الصامت". سيطر على عالم جو في التسعينيات وأوائل 2000.
+                        </p>
+                        <div class="mt-3">
+                            <span class="bg-red-600 text-white text-xs px-2 py-1 rounded">أسطورة</span>
+                        </div>
+                    </div>
+
+                    <!-- Gu Li -->
+                    <div class="champion-card bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-lg p-6 text-center">
+                        <img src="../images/Gu_Li_2024.jpg" alt="غو لي" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover">
+                        <h3 class="text-xl font-bold text-yellow-800 mb-2">غو لي</h3>
+                        <p class="text-sm text-gray-600 mb-3">الصين (1982-)</p>
+                        <p class="text-sm text-gray-700">
+                            أعظم لاعب صيني في العصر الحديث. فاز بـ 31 لقباً دولياً.
+                        </p>
+                        <div class="mt-3">
+                            <span class="bg-yellow-600 text-white text-xs px-2 py-1 rounded">بطل</span>
+                        </div>
+                    </div>
+
+                    <!-- Ke Jie -->
+                    <div class="champion-card bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-lg p-6 text-center">
+                        <img src="../images/téléchargement (4).jpg" alt="كي جي" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover">
+                        <h3 class="text-xl font-bold text-indigo-800 mb-2">كي جي</h3>
+                        <p class="text-sm text-gray-600 mb-3">الصين (1997-)</p>
+                        <p class="text-sm text-gray-700">
+                            أصغر لاعب يصل إلى 9 دان. خاض مباراة تاريخية ضد ألفا جو.
+                        </p>
+                        <div class="mt-3">
+                            <span class="bg-indigo-600 text-white text-xs px-2 py-1 rounded">نجم</span>
+                        </div>
+                    </div>
+
+                    <!-- Iyama Yuta -->
+                    <div class="champion-card bg-gradient-to-br from-pink-50 to-pink-100 rounded-lg p-6 text-center">
+                        <img src="../images/20180213eiyo07_Yuta_Iyama.jpg" alt="إياما يوتا" class="w-32 ه-32 rounded-full mx-auto mb-4 object-cover">
+                        <h3 class="text-xl font-bold text-pink-800 mb-2">إياما يوتا</h3>
+                        <p class="text-sm text-gray-600 mb-3">اليابان (1989-)</p>
+                        <p class="text-sm text-gray-700">
+                            "الوحش" - أول لاعب يحقق "السباعي الكبير" في اليابان.
+                        </p>
+                        <div class="mt-3">
+                            <span class="bg-pink-600 text-white text-xs px-2 py-1 rounded">متوج</span>
+                        </div>
+                    </div>
+
+                    <!-- AlphaGo -->
+                    <div class="champion-card bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg p-6 text-center">
+                        <img src="../images/téléchargement (25).png" alt="ألفا جو" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover">
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">ألفا جو</h3>
+                        <p class="text-sm text-gray-600 mb-3">الذكاء الاصطناعي (2016)</p>
+                        <p class="text-sm text-gray-700">
+                            ثورة في عالم جو. هزم لي سيدول 4-1 وغيّر مفهوم اللعبة للأبد.
+                        </p>
+                        <div class="mt-3">
+                            <span class="bg-gray-600 text-white text-xs px-2 py-1 rounded">AI</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tournaments Section -->
+        <section id="tournaments" class="cultural-section mb-16">
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <h2 class="text-4xl font-bold text-purple-800 mb-8 text-center">
+                    <i class="fas fa-medal ml-3"></i>أشهر البطولات العالمية
+                </h2>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- International Tournaments -->
+                    <div>
+                        <h3 class="text-2xl font-bold text-purple-700 mb-4">البطولات الدولية</h3>
+                        <div class="space-y-4">
+                            <div class="bg-gradient-to-r from-purple-50 to-purple-100 p-4 rounded-lg">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <h4 class="font-bold text-purple-800">إنجفست (Ing Cup)</h4>
+                                        <p class="text-sm text-gray-600">تأسست: 1982</p>
+                                        <p class="text-sm text-gray-700 mt-2">أغنى بطولة في العالم - جائزة 400,000 دولار</p>
+                                    </div>
+                                    <i class="fas fa-gem text-purple-600 text-2xl"></i>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-gradient-to-r from-blue-50 to-blue-100 p-4 rounded-lg">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <h4 class="font-bold text-blue-800">كأس فوجيتسو (Fujitsu Cup)</h4>
+                                        <p class="text-sm text-gray-600">تأسست: 1988</p>
+                                        <p class="text-sm text-gray-700 mt-2">أول بطولة دولية للفرق</p>
+                                    </div>
+                                    <i class="fas fa-laptop text-blue-600 text-2xl"></i>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-gradient-to-r from-green-50 to-green-100 p-4 rounded-lg">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <h4 class="font-bold text-green-800">كأس سامسونج (Samsung Cup)</h4>
+                                        <p class="text-sm text-gray-600">تأسست: 1996</p>
+                                        <p class="text-sm text-gray-700 mt-2">أهم بطولة كورية دولية</p>
+                                    </div>
+                                    <i class="fas fa-mobile-alt text-green-600 text-2xl"></i>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-gradient-to-r from-red-50 to-red-100 p-4 rounded-lg">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <h4 class="font-bold text-red-800">كأس LG (LG Cup)</h4>
+                                        <p class="text-sm text-gray-600">تأسست: 1997</p>
+                                        <p class="text-sm text-gray-700 mt-2">بطولة كورية كبرى</p>
+                                    </div>
+                                    <i class="fas fa-tv text-red-600 text-2xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- National Tournaments -->
+                    <div>
+                        <h3 class="text-2xl font-bold text-purple-700 mb-4">البطولات الوطنية</h3>
+                        <div class="space-y-4">
+                            <div class="bg-gradient-to-r from-pink-50 to-pink-100 p-4 rounded-lg">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <h4 class="font-bold text-pink-800">كأس هونينبو (اليابان)</h4>
+                                        <p class="text-sm text-gray-600">تأسست: 1936</p>
+                                        <p class="text-sm text-gray-700 mt-2">أقدم وأرقى بطولة يابانية</p>
+                                    </div>
+                                    <i class="fas fa-torii-gate text-pink-600 text-2xl"></i>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-gradient-to-r from-yellow-50 to-yellow-100 p-4 rounded-lg">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <h4 class="font-bold text-yellow-800">كأس تيان يوان (الصين)</h4>
+                                        <p class="text-sm text-gray-600">تأسست: 1987</p>
+                                        <p class="text-sm text-gray-700 mt-2">أهم بطولة صينية</p>
+                                    </div>
+                                    <i class="fas fa-dragon text-yellow-600 text-2xl"></i>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-gradient-to-r from-indigo-50 to-indigo-100 p-4 rounded-lg">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <h4 class="font-bold text-indigo-800">كأس بايك دوان (كوريا)</h4>
+                                        <p class="text-sm text-gray-600">تأسست: 1955</p>
+                                        <p class="text-sm text-gray-700 mt-2">أقدم بطولة كورية</p>
+                                    </div>
+                                    <i class="fas fa-yin-yang text-indigo-600 text-2xl"></i>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-gradient-to-r from-gray-50 to-gray-100 p-4 rounded-lg">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <h4 class="font-bold text-gray-800">كأس الميستر (أوروبا)</h4>
+                                        <p class="text-sm text-gray-600">تأسست: 1978</p>
+                                        <p class="text-sm text-gray-700 mt-2">أهم بطولة أوروبية</p>
+                                    </div>
+                                    <i class="fas fa-flag-eu text-gray-600 text-2xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Evolution Section -->
+        <section id="evolution" class="cultural-section mb-16">
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <h2 class="text-4xl font-bold text-purple-800 mb-8 text-center">
+                    <i class="fas fa-history ml-3"></i>تطور اللوحات والأحجار عبر العصور
+                </h2>
+                
+                <div class="overflow-x-auto">
+                    <table class="evolution-table w-full">
+                        <thead>
+                            <tr class="bg-purple-600 text-white">
+                                <th class="px-4 py-3 text-right">العصر</th>
+                                <th class="px-4 py-3 text-right">اللوحة</th>
+                                <th class="px-4 py-3 text-right">الأحجار</th>
+                                <th class="px-4 py-3 text-right">المواد المستخدمة</th>
+                                <th class="px-4 py-3 text-right">الخصائص</th>
+                                <th class="px-4 py-3 text-right">صورة</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Ancient China -->
+                            <tr class="border-b hover:bg-gray-50">
+                                <td class="px-4 py-3">
+                                    <div class="font-bold text-purple-700">الصين القديمة</div>
+                                    <div class="text-sm text-gray-600">2000 ق.م - 200 م</div>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <div>17×17 خط</div>
+                                    <div class="text-sm text-gray-600">بدون نجوم</div>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <div>أسود: يشم</div>
+                                    <div class="text-sm text-gray-600">أبيض: عظم</div>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <div>خشب سنديان</div>
+                                    <div class="text-sm text-gray-600">حجر طبيعي</div>
+                                </td>
+                                <td class="px-4 py-3 text-sm text-gray-700">
+                                    لوحات صغيرة، أحجار غير منتظمة الشكل
+                                </td>
+                                <td class="px-4 py-3">
+                                    <img src="../boards_evolution/images (5).jpg" alt="لوحة صينية قديمة" class="w-20 h-20 rounded object-cover">
+                                </td>
+                            </tr>
+
+                            <!-- Tang Dynasty -->
+                            <tr class="border-b hover:bg-gray-50">
+                                <td class="px-4 py-3">
+                                    <div class="font-bold text-purple-700">أسرة تانغ</div>
+                                    <div class="text-sm text-gray-600">618-907 م</div>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <div>19×19 خط</div>
+                                    <div class="text-sm text-gray-600">9 نجوم</div>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <div>أسود: سليكا</div>
+                                    <div class="text-sm text-gray-600">أبيض: صدف</div>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <div>خشب جوز</div>
+                                    <div class="text-sm text-gray-600">حجر مصقول</div>
+                                </td>
+                                <td class="px-4 py-3 text-sm text-gray-700">
+                                    تطور الحجم القياسي، ظهور النجوم
+                                </td>
+                                <td class="px-4 py-3">
+                                    <img src="../boards_evolution\téléchargement (13).jpg" alt="لوحة تانغ" class="w-20 h-20 rounded object-cover">
+                                </td>
+                            </tr>
+
+                            <!-- Heian Japan -->
+                            <tr class="border-b hover:bg-gray-50">
+                                <td class="px-4 py-3">
+                                    <div class="font-bold text-purple-700">فترة هييان</div>
+                                    <div class="text-sm text-gray-600">794-1185 م</div>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <div>19×19 خط</div>
+                                    <div class="text-sm text-gray-600">9 نجوم</div>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <div>أسود: بازلت</div>
+                                    <div class="text-sm text-gray-600">أبيض: كلوريت</div>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <div>خشب كاياكي</div>
+                                    <div class="text-sm text-gray-600">حركي</div>
+                                </td>
+                                <td class="px-4 py-3 text-sm text-gray-700">
+                                    لوحات رفيعة، أحجار مستديرة
+                                </td>
+                                <td class="px-4 py-3">
+                                    <img src="../boards_evolution\téléchargement (14).jpg" alt="لوحة هييان" class="w-20 h-20 rounded object-cover">
+                                </td>
+                            </tr>
+
+                            <!-- Edo Period -->
+                            <tr class="border-b hover:bg-gray-50">
+                                <td class="px-4 py-3">
+                                    <div class="font-bold text-purple-700">فترة إيدو</div>
+                                    <div class="text-sm text-gray-600">1603-1868 م</div>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <div>19×19 خط</div>
+                                    <div class="text-sm text-gray-600">9 نجوم</div>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <div>أسود: يشم</div>
+                                    <div class="text-sm text-gray-600">أبيض: شيلي</div>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <div>خشب كاتسورا</div>
+                                    <div class="text-sm text-gray-600">حجر نادر</div>
+                                </td>
+                                <td class="px-4 py-3 text-sm text-gray-700">
+                                    فنون دقيقة، أحجار متوازنة
+                                </td>
+                                <td class="px-4 py-3">
+                                    <img src="../boards_evolution\téléchargement (15).jpg" alt="لوحة إيدو" class="w-20 h-20 rounded object-cover">
+                                </td>
+                            </tr>
+
+                            <!-- Modern Era -->
+                            <tr class="border-b hover:bg-gray-50">
+                                <td class="px-4 py-3">
+                                    <div class="font-bold text-purple-700">العصر الحديث</div>
+                                    <div class="text-sm text-gray-600">1900-2000 م</div>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <div>19×19 خط</div>
+                                    <div class="text-sm text-gray-600">9 نجوم</div>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <div>أسود: يشم صناعي</div>
+                                    <div class="text-sm text-gray-600">أبيض: خزف</div>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <div>خشب صناعي</div>
+                                    <div class="text-sm text-gray-600">بلاستيك</div>
+                                </td>
+                                <td class="px-4 py-3 text-sm text-gray-700">
+                                    إنتاج ضخم، أسعار معقولة
+                                </td>
+                                <td class="px-4 py-3">
+                                    <img src="../boards_evolution\téléchargement (16).jpg" alt="لوحة حديثة" class="w-20 h-20 rounded object-cover">
+                                </td>
+                            </tr>
+
+                            <!-- Digital Age -->
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-3">
+                                    <div class="font-bold text-purple-700">العصر الرقمي</div>
+                                    <div class="text-sm text-gray-600">2000 - الآن</div>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <div>متعدد الأحجام</div>
+                                    <div class="text-sm text-gray-600">شاشات لمس</div>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <div>أسود: أزرق</div>
+                                    <div class="text-sm text-gray-600">أبيض: أبيض</div>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <div>شاشات LCD</div>
+                                    <div class="text-sm text-gray-600">برمجيات</div>
+                                </td>
+                                <td class="px-4 py-3 text-sm text-gray-700">
+                                    لوحات إلكترونية، ألعاب عبر الإنترنت
+                                </td>
+                                <td class="px-4 py-3">
+                                    <img src="../boards_evolution\téléchargement (17).jpg" alt="لوحة رقمية" class="w-20 h-20 rounded object-cover">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Evolution Summary -->
+                <div class="mt-8 bg-purple-50 p-6 rounded-lg">
+                    <h3 class="text-xl font-bold text-purple-800 mb-4">ملخص التطور</h3>
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <div class="text-center">
+                            <i class="fas fa-ruler-combined text-3xl text-purple-600 mb-2"></i>
+                            <h4 class="font-semibold">الحجم</h4>
+                            <p class="text-sm text-gray-700">من 17×17 إلى 19×19 القياسي</p>
+                        </div>
+                        <div class="text-center">
+                            <i class="fas fa-gem text-3xl text-purple-600 mb-2"></i>
+                            <h4 class="font-semibold">المواد</h4>
+                            <p class="text-sm text-gray-700">من الطبيعي إلى الصناعي والرقمي</p>
+                        </div>
+                        <div class="text-center">
+                            <i class="fas fa-globe text-3xl text-purple-600 mb-2"></i>
+                            <h4 class="font-semibold">الانتشار</h4>
+                            <p class="text-sm text-gray-700">من آسيا إلى العالم أجمع</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gallery Section -->
+        <section id="gallery" class="cultural-section mb-16">
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <h2 class="text-4xl font-bold text-purple-800 mb-8 text-center">
+                    <i class="fas fa-images ml-3"></i>معرض الصور التاريخية
+                </h2>
+                
+                <div class="image-gallery">
+                    <!-- Ancient Boards -->
+                    <div class="gallery-item">
+                        <img src="../historic_gallery/han_board.jpg" alt="لوحة جو قديمة">
+                        <div class="gallery-overlay">
+                            <h4 class="font-bold">لوحة جو صينية قديمة</h4>
+                            <p>من عهد أسرة هان (202 ق.م - 220 م)</p>
+                        </div>
+                    </div>
+
+                    <!-- Honinbo School -->
+                    <div class="gallery-item">
+                        <img src="../historic_gallery/téléchargement (6).jpg" alt="مدرسة هونينبو">
+                        <div class="gallery-overlay">
+                            <h4 class="font-bold">مدرسة هونينبو</h4>
+                            <p>أشهر مدرسة جو يابانية (1612-1940)</p>
+                        </div>
+                    </div>
+
+                    <!-- Modern Tournament -->
+                    <div class="gallery-item">
+                        <img src="../historic_gallery/téléchargement (7).jpg" alt="بطولة حديثة">
+                        <div class="gallery-overlay">
+                            <h4 class="font-bold">بطولة عالمية حديثة</h4>
+                            <p>إنجفست 2020 - تايوان</p>
+                        </div>
+                    </div>
+
+                    <!-- Traditional Stones -->
+                    <div class="gallery-item">
+                        <img src="../historic_gallery/téléchargement (8).jpg" alt="أحجار تقليدية">
+                        <div class="gallery-overlay">
+                            <h4 class="font-bold">أحجار جو تقليدية</h4>
+                            <p>أحجار يشم وكلوريت يابانية</p>
+                        </div>
+                    </div>
+
+                    <!-- Go Museum -->
+                    <div class="gallery-item">
+                        <img src="../historic_gallery/téléchargement (9).jpg" alt="متحف جو">
+                        <div class="gallery-overlay">
+                            <h4 class="font-bold">متحف جو في سيول</h4>
+                            <p>أكبر متحف مخصص للعبة جو</p>
+                        </div>
+                    </div>
+
+                    <!-- Digital Go -->
+                    <div class="gallery-item">
+                        <img src="../historic_gallery/téléchargement (10).jpg" alt="جو رقمي">
+                        <div class="gallery-overlay">
+                            <h4 class="font-bold">لوحة جو إلكترونية</h4>
+                            <p>التكنولوجيا الحديثة تل meet التقليد</p>
+                        </div>
+                    </div>
+
+                    <!-- Famous Match -->
+                    <div class="gallery-item">
+                        <img src="../historic_gallery/téléchargement (11).jpg" alt="مباراة شهيرة">
+                        <div class="gallery-overlay">
+                            <h4 class="font-bold">مباراة تاريخية</h4>
+                            <p>لي سيدول ضد ألفا جو 2016</p>
+                        </div>
+                    </div>
+
+                    <!-- Cultural Event -->
+                    <div class="gallery-item">
+                        <img src="../historic_gallery/téléchargement (12).jpg" alt="فعالية ثقافية">
+                        <div class="gallery-overlay">
+                            <h4 class="font-bold">مهرجان جو الثقافي</h4>
+                            <p">مهرجان سنوي في كيوتو</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gallery Info -->
+                <div class="mt-8 bg-gradient-to-r from-purple-50 to-blue-50 p-6 rounded-lg">
+                    <h3 class="text-xl font-bold text-purple-800 mb-4">معلومات عن المعرض</h3>
+                    <p class="text-gray-700 mb-4">
+                        يضم معرضنا صوراً نادرة من متاحف حول العالم توثق تطور لعبة جو عبر العصور.
+                        الصور تعرض اللوحات والأحجار الأصلية والمباريات التاريخية والأحداث الثقافية.
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <span class="bg-purple-600 text-white px-3 py-1 rounded-full text-sm">
+                            <i class="fas fa-camera ml-1"></i> 100+ صورة
+                        </span>
+                        <span class="bg-blue-600 text-white px-3 py-1 rounded-full text-sm">
+                            <i class="fas fa-globe ml-1"></i> 15 دولة
+                        </span>
+                        <span class="bg-green-600 text-white px-3 py-1 rounded-full text-sm">
+                            <i class="fas fa-clock ml-1"></i> 2500+ سنة
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-8 px-4 mt-12">
+        <div class="container mx-auto text-center">
+            <div class="flex items-center justify-center mb-4">
+                <div class="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center ml-3">
+                    <i class="fas fa-circle text-white"></i>
+                </div>
+                <h3 class="text-2xl font-bold">بوركي جو BourkiGo </h3>
+            </div>
+            <p class="text-gray-400 mb-4">
+                القسم الثقافي - رحلة في تاريخ وثقافة لعبة بوركي جو BourkiGo
+            </p>
+            <div class="flex justify-center space-x-6 space-x-reverse">
+                <a href="#" class="text-gray-400 hover:text-white transition">
+                    <i class="fab fa-facebook-f text-2xl"></i>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-white transition">
+                    <i class="fab fa-twitter text-2xl"></i>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-white transition">
+                    <i class="fab fa-instagram text-2xl"></i>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-white transition">
+                    <i class="fab fa-youtube text-2xl"></i>
+                </a>
+            </div>
+            <p class="text-gray-500 text-sm mt-6">
+                © 2025  بوركي جو BourkiGo. جميع الحقوق محفوظة.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add intersection observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all cultural sections
+        document.querySelectorAll('.cultural-section').forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(20px)';
+            section.style.transition = 'all 0.6s ease-out';
+            observer.observe(section);
+        });
+
+        // Add click handlers to gallery items
+        document.querySelectorAll('.gallery-item').forEach(item => {
+            item.addEventListener('click', function() {
+                // In a real application, this would open a lightbox or modal
+                const title = this.querySelector('h4').textContent;
+                showMessage(`تم اختيار: ${title}`);
+            });
+        });
+
+        // Add hover effects to country cards
+        document.querySelectorAll('.country-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+
+        // Show message function
+        function showMessage(message) {
+            const toast = document.createElement('div');
+            toast.className = 'fixed top-4 left-1/2 transform -translate-x-1/2 bg-purple-600 text-white px-6 py-3 rounded-lg shadow-lg z-50';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+
+        // Add parallax effect to hero section
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.bg-gradient-to-r');
+            if (hero) {
+                hero.style.transform = `translateY(${scrolled * 0.5}px)`;
+            }
+        });
+    </script>
+</body>
+</html>
