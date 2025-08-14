@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>شاهد الدروس التعليمية - بوركي جو BourkiGo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&display=swap');
+        
+        * {
+            font-family: 'Tajawal', sans-serif;
+        }
+        
+        .video-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .video-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        
+        .video-thumbnail {
+            position: relative;
+            overflow: hidden;
+            background: #000;
+        }
+        
+        .video-thumbnail::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, transparent 60%, rgba(0,0,0,0.7));
+            z-index: 1;
+        }
+        
+        .play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            transition: all 0.3s ease;
+        }
+        
+        .video-card:hover .play-button {
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+        
+        .duration-badge {
+            position: absolute;
+            bottom: 8px;
+            left: 8px;
+            z-index: 2;
+        }
+        
+        .level-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            z-index: 2;
+        }
+        
+        .filter-btn {
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn.active {
+            background-color: #7c3aed;
+            color: white;
+        }
+        
+        .search-input:focus {
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+        }
+        
+        .featured-video {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-md sticky top-0 z-40">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4 space-x-reverse">
+                    <a href="index.html" class="flex items-center space-x-3 space-x-reverse">
+                        <div class="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center">
+                            <i class="fas fa-circle text-white text-xl"></i>
+                        </div>
+                        <h1 class="text-xl font-bold text-purple-800">بوركي جو BourkiGo</h1>
+                    </a>
+                </div>
+                <nav class="hidden md:flex space-x-6 space-x-reverse">
+                    <a href="index.html" class="text-gray-600 hover:text-purple-600 transition">الرئيسية</a>
+                    <a href="#" class="text-purple-600 font-semibold">الدروس التعليمية</a>
+                    <a href="#" class="text-gray-600 hover:text-purple-600 transition">الممارسة</a>
+                    <a href="#" class="text-gray-600 hover:text-purple-600 transition">المنتدى</a>
+                    <a href="#" class="text-gray-600 hover:text-purple-600 transition">حول اللعبة</a>
+                </nav>
+                <button class="md:hidden text-gray-600" onclick="toggleMobileMenu()">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="hidden bg-white shadow-lg md:hidden">
+        <nav class="container mx-auto px-4 py-4 space-y-3">
+            <a href="index.html" class="block text-gray-600 hover:text-purple-600 transition py-2">الرئيسية</a>
+            <a href="#" class="block text-purple-600 font-semibold py-2">الدروس التعليمية</a>
+            <a href="#" class="block text-gray-600 hover:text-purple-600 transition py-2">الممارسة</a>
+            <a href="#" class="block text-gray-600 hover:text-purple-600 transition py-2">المنتدى</a>
+            <a href="#" class="block text-gray-600 hover:text-purple-600 transition py-2">حول اللعبة</a>
+        </nav>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-br from-purple-600 to-blue-600 text-white py-16">
+        <div class="container mx-auto px-4">
+            <div class="text-center">
+                <h1 class="text-4xl md:text-5xl font-bold mb-4">
+                    <i class="fas fa-play-circle ml-3"></i>شاهد الدروس التعليمية
+                </h1>
+                <p class="text-xl mb-8 opacity-90">
+                    تعلم لعبة جو خطوة بخطوة مع أفضل المدربين واللاعبين المحترفين
+                </p>
+                
+                <!-- Search Bar -->
+                <div class="max-w-2xl mx-auto">
+                    <div class="relative">
+                        <input type="text" 
+                               placeholder="ابحث عن درس تعليمي..." 
+                               class="search-input w-full px-6 py-4 pr-12 rounded-full text-gray-800 text-lg focus:outline-none">
+                        <button class="absolute left-4 top-1/2 transform -translate-y-1/2 text-purple-600 hover:text-purple-700">
+                            <i class="fas fa-search text-xl"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filter Section -->
+    <section class="bg-white py-6 shadow-sm sticky top-16 z-30">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-wrap items-center justify-between gap-4">
+                <div class="flex flex-wrap gap-2">
+                    <button class="filter-btn active px-4 py-2 rounded-full bg-gray-200 text-gray-700 hover:bg-purple-600 hover:text-white transition">
+                        الكل
+                    </button>
+                    <button class="filter-btn px-4 py-2 rounded-full bg-gray-200 text-gray-700 hover:bg-purple-600 hover:text-white transition">
+                        للمبتدئين
+                    </button>
+                    <button class="filter-btn px-4 py-2 rounded-full bg-gray-200 text-gray-700 hover:bg-purple-600 hover:text-white transition">
+                        للمتوسطين
+                    </button>
+                    <button class="filter-btn px-4 py-2 rounded-full bg-gray-200 text-gray-700 hover:bg-purple-600 hover:text-white transition">
+                        للمتقدمين
+                    </button>
+                    <button class="filter-btn px-4 py-2 rounded-full bg-gray-200 text-gray-700 hover:bg-purple-600 hover:text-white transition">
+                        استراتيجيات
+                    </button>
+                    <button class="filter-btn px-4 py-2 rounded-full bg-gray-200 text-gray-700 hover:bg-purple-600 hover:text-white transition">
+                        مشاكل وحلول
+                    </button>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="text-gray-600">الترتيب حسب:</span>
+                    <select class="px-3 py-2 border rounded-lg focus:outline-none focus:border-purple-600">
+                        <option>الأحدث</option>
+                        <option>الأكثر مشاهدة</option>
+                        <option>الأعلى تقييماً</option>
+                        <option>الأطول مدة</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Video -->
+    <section class="py-12">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-gray-800 mb-8 text-center">
+                <i class="fas fa-star text-yellow-500 ml-2"></i>الدرس المميز هذا الأسبوع
+            </h2>
+            
+            <div class="featured-video rounded-2xl overflow-hidden shadow-2xl max-w-4xl mx-auto">
+                <div class="relative aspect-video">
+                    <img src="https://picsum.photos/seed/featured-go-lesson/800/450" alt="الدرس المميز" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+                        <div class="text-center text-white">
+                            <div class="play-button w-20 h-20 bg-white bg-opacity-90 rounded-full flex items-center justify-center pulse-animation">
+                                <i class="fas fa-play text-purple-600 text-3xl ml-1"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold mt-6 mb-2">أساسيات لعبة جو في 30 دقيقة</h3>
+                            <p class="text-lg opacity-90">تعلم القواعد الأساسية وأول استراتيجياتك</p>
+                        </div>
+                    </div>
+                    <div class="duration-badge bg-black bg-opacity-75 text-white px-3 py-1 rounded text-sm">
+                        30:45
+                    </div>
+                </div>
+                <div class="p-6 bg-white">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-4 space-x-reverse">
+                            <img src="https://picsum.photos/seed/instructor1/50/50" alt="المدرب" class="w-12 h-12 rounded-full">
+                            <div>
+                                <h4 class="font-semibold">أحمد محمد</h4>
+                                <p class="text-sm text-gray-600">مدرب محترف - درجة 6 دان</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-4 space-x-reverse text-gray-600">
+                            <span><i class="fas fa-eye ml-1"></i> 45,234 مشاهدة</span>
+                            <span><i class="fas fa-star text-yellow-500 ml-1"></i> 4.9</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Video Categories -->
+    <section class="py-12 bg-gray-100">
+        <div class="container mx-auto px-4">
+            <!-- Beginner Videos -->
+            <div class="mb-12">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800">
+                        <i class="fas fa-seedling text-green-500 ml-2"></i>دروس للمبتدئين
+                    </h2>
+                    <a href="#" class="text-purple-600 hover:text-purple-700 font-semibold">
+                        عرض الكل <i class="fas fa-arrow-left mr-1"></i>
+                    </a>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    <!-- Video 1 -->
+                    <div class="video-card bg-white rounded-lg overflow-hidden shadow-lg" onclick="playVideo('intro-to-go')">
+                        <div class="video-thumbnail aspect-video relative">
+                            <img src="https://picsum.photos/seed/go-intro/400/225" alt="مقدمة في جو" class="w-full h-full object-cover">
+                            <div class="play-button w-12 h-12 bg-white bg-opacity-90 rounded-full flex items-center justify-center">
+                                <i class="fas fa-play text-purple-600 text-lg ml-1"></i>
+                            </div>
+                            <div class="duration-badge bg-black bg-opacity-75 text-white px-2 py-1 rounded text-xs">
+                                15:30
+                            </div>
+                            <div class="level-badge bg-green-500 text-white px-2 py-1 rounded text-xs">
+                                مبتدئ
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-semibold text-gray-800 mb-2">مقدمة في لعبة جو</h3>
+                            <p class="text-sm text-gray-600 mb-3">تعرف على تاريخ اللعبة وأهميتها</p>
+                            <div class="flex items-center justify-between text-xs text-gray-500">
+                                <span><i class="fas fa-eye ml-1"></i> 12,450</span>
+                                <span><i class="fas fa-clock ml-1"></i> أسبوعين</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Video 2 -->
+                    <div class="video-card bg-white rounded-lg overflow-hidden shadow-lg" onclick="playVideo('basic-rules')">
+                        <div class="video-thumbnail aspect-video relative">
+                            <img src="https://picsum.photos/seed/go-rules/400/225" alt="القواعد الأساسية" class="w-full h-full object-cover">
+                            <div class="play-button w-12 h-12 bg-white bg-opacity-90 rounded-full flex items-center justify-center">
+                                <i class="fas fa-play text-purple-600 text-lg ml-1"></i>
+                            </div>
+                            <div class="duration-badge bg-black bg-opacity-75 text-white px-2 py-1 rounded text-xs">
+                                22:15
+                            </div>
+                            <div class="level-badge bg-green-500 text-white px-2 py-1 rounded text-xs">
+                                مبتدئ
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-semibold text-gray-800 mb-2">القواعد الأساسية بالتفصيل</h3>
+                            <p class="text-sm text-gray-600 mb-3">احتجاز الأحجار، الحرية، والكو</p>
+                            <div class="flex items-center justify-between text-xs text-gray-500">
+                                <span><i class="fas fa-eye ml-1"></i> 18,230</span>
+                                <span><i class="fas fa-clock ml-1"></i> 3 أيام</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Video 3 -->
+                    <div class="video-card bg-white rounded-lg overflow-hidden shadow-lg" onclick="playVideo('first-game')">
+                        <div class="video-thumbnail aspect-video relative">
+                            <img src="https://picsum.photos/seed/first-game/400/225" alt="لعبتك الأولى" class="w-full h-full object-cover">
+                            <div class="play-button w-12 h-12 bg-white bg-opacity-90 rounded-full flex items-center justify-center">
+                                <i class="fas fa-play text-purple-600 text-lg ml-1"></i>
+                            </div>
+                            <div class="duration-badge bg-black bg-opacity-75 text-white px-2 py-1 rounded text-xs">
+                                18:45
+                            </div>
+                            <div class="level-badge bg-green-500 text-white px-2 py-1 rounded text-xs">
+                                مبتدئ
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-semibold text-gray-800 mb-2">لعبتك الأولى خطوة بخطوة</h3>
+                            <p class="text-sm text-gray-600 mb-3">تطبيق عملي للقواعد الأساسية</p>
+                            <div class="flex items-center justify-between text-xs text-gray-500">
+                                <span><i class="fas fa-eye ml-1"></i> 15,670</span>
+                                <span><i class="fas fa-clock ml-1"></i> 5 أيام</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Video 4 -->
+                    <div class="video-card bg-white rounded-lg overflow-hidden shadow-lg" onclick="playVideo('basic-strategy')">
+                        <div class="video-thumbnail aspect-video relative">
+                            <img src="https://picsum.photos/seed/basic-strategy/400/225" alt="استراتيجيات أساسية" class="w-full h-full object-cover">
+                            <div class="play-button w-12 h-12 bg-white bg-opacity-90 rounded-full flex items-center justify-center">
+                                <i class="fas fa-play text-purple-600 text-lg ml-1"></i>
+                            </div>
+                            <div class="duration-badge bg-black bg-opacity-75 text-white px-2 py-1 rounded text-xs">
+                                25:00
+                            </div>
+                            <div class="level-badge bg-green-500 text-white px-2 py-1 rounded text-xs">
+                                مبتدئ
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-semibold text-gray-800 mb-2">أول استراتيجياتك</h3>
+                            <p class="text-sm text-gray-600 mb-3">السيطرة على الزوايا والحواف</p>
+                            <div class="flex items-center justify-between text-xs text-gray-500">
+                                <span><i class="fas fa-eye ml-1"></i> 20,890</span>
+                                <span><i class="fas fa-clock ml-1"></i> أسبوع</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Intermediate Videos -->
+            <div class="mb-12">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800">
+                        <i class="fas fa-chart-line text-blue-500 ml-2"></i>دروس للمتوسطين
+                    </h2>
+                    <a href="#" class="text-purple-600 hover:text-purple-700 font-semibold">
+                        عرض الكل <i class="fas fa-arrow-left mr-1"></i>
+                    </a>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    <!-- Video 5 -->
+                    <div class="video-card bg-white rounded-lg overflow-hidden shadow-lg" onclick="playVideo('joseki-basics')">
+                        <div class="video-thumbnail aspect-video relative">
+                            <img src="https://picsum.photos/seed/joseki/400/225" alt="جوسي أساسي" class="w-full h-full object-cover">
+                            <div class="play-button w-12 h-12 bg-white bg-opacity-90 rounded-full flex items-center justify-center">
+                                <i class="fas fa-play text-purple-600 text-lg ml-1"></i>
+                            </div>
+                            <div class="duration-badge bg-black bg-opacity-75 text-white px-2 py-1 rounded text-xs">
+                                35:20
+                            </div>
+                            <div class="level-badge bg-blue-500 text-white px-2 py-1 rounded text-xs">
+                                متوسط
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-semibold text-gray-800 mb-2">مقدمة في الجوسي</h3>
+                            <p class="text-sm text-gray-600 mb-3">أنماط الزوايا القياسية</p>
+                            <div class="flex items-center justify-between text-xs text-gray-500">
+                                <span><i class="fas fa-eye ml-1"></i> 8,920</span>
+                                <span><i class="fas fa-clock ml-1"></i> 10 أيام</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Video 6 -->
+                    <div class="video-card bg-white rounded-lg overflow-hidden shadow-lg" onclick="playVideo('life-and-death')">
+                        <div class="video-thumbnail aspect-video relative">
+                            <img src="https://picsum.photos/seed/life-death/400/225" alt="الحياة والموت" class="w-full h-full object-cover">
+                            <div class="play-button w-12 h-12 bg-white bg-opacity-90 rounded-full flex items-center justify-center">
+                                <i class="fas fa-play text-purple-600 text-lg ml-1"></i>
+                            </div>
+                            <div class="duration-badge bg-black bg-opacity-75 text-white px-2 py-1 rounded text-xs">
+                                40:15
+                            </div>
+                            <div class="level-badge bg-blue-500 text-white px-2 py-1 rounded text-xs">
+                                متوسط
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-semibold text-gray-800 mb-2">مشاكل الحياة والموت</h3>
+                            <p class="text-sm text-gray-600 mb-3">كيف تجعل مجموعاتك تعيش</p>
+                            <div class="flex items-center justify-between text-xs text-gray-500">
+                                <span><i class="fas fa-eye ml-1"></i> 12,340</span>
+                                <span><i class="fas fa-clock ml-1"></i> أسبوعين</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Video 7 -->
+                    <div class="video-card bg-white rounded-lg overflow-hidden shadow-lg" onclick="playVideo('middle-game')">
+                        <div class="video-thumbnail aspect-video relative">
+                            <img src="https://picsum.photos/seed/middle-game/400/225" alt="مرحلة الوسط" class="w-full h-full object-cover">
+                            <div class="play-button w-12 h-12 bg-white bg-opacity-90 rounded-full flex items-center justify-center">
+                                <i class="fas fa-play text-purple-600 text-lg ml-1"></i>
+                            </div>
+                            <div class="duration-badge bg-black bg-opacity-75 text-white px-2 py-1 rounded text-xs">
+                                45:30
+                            </div>
+                            <div class="level-badge bg-blue-500 text-white px-2 py-1 rounded text-xs">
+                                متوسط
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-semibold text-gray-800 mb-2">استراتيجيات مرحلة الوسط</h3>
+                            <p class="text-sm text-gray-600 mb-3">التوسع والهجوم والدفاع</p>
+                            <div class="flex items-center justify-between text-xs text-gray-500">
+                                <span><i class="fas fa-eye ml-1"></i> 9,780</span>
+                                <span><i class="fas fa-clock ml-1"></i> 3 أسابيع</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Video 8 -->
+                    <div class="video-card bg-white rounded-lg overflow-hidden shadow-lg" onclick="playVideo('endgame')">
+                        <div class="video-thumbnail aspect-video relative">
+                            <img src="https://picsum.photos/seed/endgame/400/225" alt="مرحلة النهاية" class="w-full h-full object-cover">
+                            <div class="play-button w-12 h-12 bg-white bg-opacity-90 rounded-full flex items-center justify-center">
+                                <i class="fas fa-play text-purple-600 text-lg ml-1"></i>
+                            </div>
+                            <div class="duration-badge bg-black bg-opacity-75 text-white px-2 py-1 rounded text-xs">
+                                38:45
+                            </div>
+                            <div class="level-badge bg-blue-500 text-white px-2 py-1 rounded text-xs">
+                                متوسط
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-semibold text-gray-800 mb-2">فن مرحلة النهاية</h3>
+                            <p class="text-sm text-gray-600 mb-3">حساب النقاط والتحركات الأخيرة</p>
+                            <div class="flex items-center justify-between text-xs text-gray-500">
+                                <span><i class="fas fa-eye ml-1"></i> 7,650</span>
+                                <span><i class="fas fa-clock ml-1"></i> شهر</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Advanced Videos -->
+            <div class="mb-12">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800">
+                        <i class="fas fa-crown text-purple-500 ml-2"></i>دروس للمتقدمين
+                    </h2>
+                    <a href="#" class="text-purple-600 hover:text-purple-700 font-semibold">
+                        عرض الكل <i class="fas fa-arrow-left mr-1"></i>
+                    </a>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    <!-- Video 9 -->
+                    <div class="video-card bg-white rounded-lg overflow-hidden shadow-lg" onclick="playVideo('pro-strategies')">
+                        <div class="video-thumbnail aspect-video relative">
+                            <img src="https://picsum.photos/seed/pro-strategies/400/225" alt="استراتيجيات محترفين" class="w-full h-full object-cover">
+                            <div class="play-button w-12 h-12 bg-white bg-opacity-90 rounded-full flex items-center justify-center">
+                                <i class="fas fa-play text-purple-600 text-lg ml-1"></i>
+                            </div>
+                            <div class="duration-badge bg-black bg-opacity-75 text-white px-2 py-1 rounded text-xs">
+                                55:00
+                            </div>
+                            <div class="level-badge bg-purple-500 text-white px-2 py-1 rounded text-xs">
+                                متقدم
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-semibold text-gray-800 mb-2">استراتيجيات اللاعبين المحترفين</h3>
+                            <p class="text-sm text-gray-600 mb-3">تحليل ألعاب البطولات</p>
+                            <div class="flex items-center justify-between text-xs text-gray-500">
+                                <span><i class="fas fa-eye ml-1"></i> 5,420</span>
+                                <span><i class="fas fa-clock ml-1"></i> شهرين</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Video 10 -->
+                    <div class="video-card bg-white rounded-lg overflow-hidden shadow-lg" onclick="playVideo('complex-tsumego')">
+                        <div class="video-thumbnail aspect-video relative">
+                            <img src="https://picsum.photos/seed/tsumego/400/225" alt="تسوميجو معقد" class="w-full h-full object-cover">
+                            <div class="play-button w-12 h-12 bg-white bg-opacity-90 rounded-full flex items-center justify-center">
+                                <i class="fas fa-play text-purple-600 text-lg ml-1"></i>
+                            </div>
+                            <div class="duration-badge bg-black bg-opacity-75 text-white px-2 py-1 rounded text-xs">
+                                48:30
+                            </div>
+                            <div class="level-badge bg-purple-500 text-white px-2 py-1 rounded text-xs">
+                                متقدم
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-semibold text-gray-800 mb-2">مشاكل تسوميجو المعقدة</h3>
+                            <p class="text-sm text-gray-600 mb-3">تدريب على التفكير العميق</p>
+                            <div class="flex items-center justify-between text-xs text-gray-500">
+                                <span><i class="fas fa-eye ml-1"></i> 4,890</span>
+                                <span><i class="fas fa-clock ml-1"></i> 3 أسابيع</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Video 11 -->
+                    <div class="video-card bg-white rounded-lg overflow-hidden shadow-lg" onclick="playVideo('fuseki-theory')">
+                        <div class="video-thumbnail aspect-video relative">
+                            <img src="https://picsum.photos/seed/fuseki/400/225" alt="نظرية الفوسيكي" class="w-full h-full object-cover">
+                            <div class="play-button w-12 h-12 bg-white bg-opacity-90 rounded-full flex items-center justify-center">
+                                <i class="fas fa-play text-purple-600 text-lg ml-1"></i>
+                            </div>
+                            <div class="duration-badge bg-black bg-opacity-75 text-white px-2 py-1 rounded text-xs">
+                                62:15
+                            </div>
+                            <div class="level-badge bg-purple-500 text-white px-2 py-1 rounded text-xs">
+                                متقدم
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-semibold text-gray-800 mb-2">نظرية الفوسيكي المتقدمة</h3>
+                            <p class="text-sm text-gray-600 mb-3">استراتيجيات الافتتاحية العميقة</p>
+                            <div class="flex items-center justify-between text-xs text-gray-500">
+                                <span><i class="fas fa-eye ml-1"></i> 3,760</span>
+                                <span><i class="fas fa-clock ml-1"></i> شهر</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Video 12 -->
+                    <div class="video-card bg-white rounded-lg overflow-hidden shadow-lg" onclick="playVideo('tournament-analysis')">
+                        <div class="video-thumbnail aspect-video relative">
+                            <img src="https://picsum.photos/seed/tournament/400/225" alt="تحليل بطولات" class="w-full h-full object-cover">
+                            <div class="play-button w-12 h-12 bg-white bg-opacity-90 rounded-full flex items-center justify-center">
+                                <i class="fas fa-play text-purple-600 text-lg ml-1"></i>
+                            </div>
+                            <div class="duration-badge bg-black bg-opacity-75 text-white px-2 py-1 rounded text-xs">
+                                70:00
+                            </div>
+                            <div class="level-badge bg-purple-500 text-white px-2 py-1 rounded text-xs">
+                                متقدم
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-semibold text-gray-800 mb-2">تحليل بطولات العالم</h3>
+                            <p class="text-sm text-gray-600 mb-3">دروس من أبطال العالم</p>
+                            <div class="flex items-center justify-between text-xs text-gray-500">
+                                <span><i class="fas fa-eye ml-1"></i> 6,230</span>
+                                <span><i class="fas fa-clock ml-1"></i> أسبوعين</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Live Sessions Section -->
+    <section class="py-12 bg-purple-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-gray-800 mb-8 text-center">
+                <i class="fas fa-video text-red-500 ml-2"></i>جلسات مباشرة قادمة
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Live Session 1 -->
+                <div class="bg-white rounded-lg p-6 shadow-lg">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="bg-red-100 text-red-600 px-3 py-1 rounded-full text-sm font-semibold">
+                            <i class="fas fa-circle text-red-500 ml-1 text-xs"></i> مباشر قريباً
+                        </span>
+                        <span class="text-gray-500 text-sm">
+                            <i class="fas fa-calendar ml-1"></i> 15 ديسمبر
+                        </span>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">ورشة عمل: استراتيجيات الهجوم</h3>
+                    <p class="text-gray-600 mb-4">تعلم أفضل تقنيات الهجوم مع المدرب خالد</p>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-2 space-x-reverse">
+                            <img src="https://picsum.photos/seed/instructor2/40/40" alt="المدرب" class="w-10 h-10 rounded-full">
+                            <div>
+                                <p class="font-semibold text-sm">خالد أحمد</p>
+                                <p class="text-xs text-gray-500">الساعة 8:00 مساءً</p>
+                            </div>
+                        </div>
+                        <button class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition">
+                            تذكير
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Live Session 2 -->
+                <div class="bg-white rounded-lg p-6 shadow-lg">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm font-semibold">
+                            <i class="fas fa-users ml-1"></i> مفتوح للجميع
+                        </span>
+                        <span class="text-gray-500 text-sm">
+                            <i class="fas fa-calendar ml-1"></i> 18 ديسمبر
+                        </span>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">تحليل لعبة الأسبوع</h3>
+                    <p class="text-gray-600 mb-4">تحليل مفصل لأفضل الألعاب هذا الأسبوع</p>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-2 space-x-reverse">
+                            <img src="https://picsum.photos/seed/instructor3/40/40" alt="المدرب" class="w-10 h-10 rounded-full">
+                            <div>
+                                <p class="font-semibold text-sm">سارة محمد</p>
+                                <p class="text-xs text-gray-500">الساعة 7:00 مساءً</p>
+                            </div>
+                        </div>
+                        <button class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition">
+                            تذكير
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Live Session 3 -->
+                <div class="bg-white rounded-lg p-6 shadow-lg">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="bg-green-100 text-green-600 px-3 py-1 rounded-full text-sm font-semibold">
+                            <i class="fas fa-graduation-cap ml-1"></i> للمتقدمين
+                        </span>
+                        <span class="text-gray-500 text-sm">
+                            <i class="fas fa-calendar ml-1"></i> 22 ديسمبر
+                        </span>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">تسوميجو متقدم</h3>
+                    <p class="text-gray-600 mb-4">حل مشاكل معقدة مع المدرب يوسف</p>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-2 space-x-reverse">
+                            <img src="https://picsum.photos/seed/instructor4/40/40" alt="المدرب" class="w-10 h-10 rounded-full">
+                            <div>
+                                <p class="font-semibold text-sm">يوسف علي</p>
+                                <p class="text-xs text-gray-500">الساعة 9:00 مساءً</p>
+                            </div>
+                        </div>
+                        <button class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition">
+                            تذكير
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Popular Playlists -->
+    <section class="py-12">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-gray-800 mb-8 text-center">
+                <i class="fas fa-list text-purple-600 ml-2"></i>قوائم التشغيل الشعبية
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Playlist 1 -->
+                <div class="group cursor-pointer" onclick="openPlaylist('beginner-course')">
+                    <div class="relative overflow-hidden rounded-lg mb-3">
+                        <img src="https://picsum.photos/seed/beginner-playlist/300/200" alt="دورة المبتدئين" class="w-full h-48 object-cover group-hover:scale-105 transition duration-300">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-70"></div>
+                        <div class="absolute bottom-4 left-4 right-4 text-white">
+                            <h3 class="font-bold text-lg">دورة المبتدئين الكاملة</h3>
+                            <p class="text-sm opacity-90">12 فيديو • 4 ساعات</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm text-gray-600">
+                            <i class="fas fa-play-circle ml-1"></i> 45,230 مشاهدة
+                        </span>
+                        <span class="text-purple-600 font-semibold text-sm">
+                            ابدأ الآن <i class="fas fa-arrow-left mr-1"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Playlist 2 -->
+                <div class="group cursor-pointer" onclick="openPlaylist('strategy-master')">
+                    <div class="relative overflow-hidden rounded-lg mb-3">
+                        <img src="https://picsum.photos/seed/strategy-playlist/300/200" alt="إستراتيجية ماستر" class="w-full h-48 object-cover group-hover:scale-105 transition duration-300">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-70"></div>
+                        <div class="absolute bottom-4 left-4 right-4 text-white">
+                            <h3 class="font-bold text-lg">إستراتيجية ماستر</h3>
+                            <p class="text-sm opacity-90">18 فيديو • 8 ساعات</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm text-gray-600">
+                            <i class="fas fa-play-circle ml-1"></i> 32,150 مشاهدة
+                        </span>
+                        <span class="text-purple-600 font-semibold text-sm">
+                            ابدأ الآن <i class="fas fa-arrow-left mr-1"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Playlist 3 -->
+                <div class="group cursor-pointer" onclick="openPlaylist('tsumego-collection')">
+                    <div class="relative overflow-hidden rounded-lg mb-3">
+                        <img src="https://picsum.photos/seed/tsumego-playlist/300/200" alt="مجموعة تسوميجو" class="w-full h-48 object-cover group-hover:scale-105 transition duration-300">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-70"></div>
+                        <div class="absolute bottom-4 left-4 right-4 text-white">
+                            <h3 class="font-bold text-lg">مجموعة تسوميجو</h3>
+                            <p class="text-sm opacity-90">50 فيديو • 15 ساعة</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm text-gray-600">
+                            <i class="fas fa-play-circle ml-1"></i> 28,940 مشاهدة
+                        </span>
+                        <span class="text-purple-600 font-semibold text-sm">
+                            ابدأ الآن <i class="fas fa-arrow-left mr-1"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Playlist 4 -->
+                <div class="group cursor-pointer" onclick="openPlaylist('pro-games')">
+                    <div class="relative overflow-hidden rounded-lg mb-3">
+                        <img src="https://picsum.photos/seed/pro-games-playlist/300/200" alt="ألعاب المحترفين" class="w-full h-48 object-cover group-hover:scale-105 transition duration-300">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-70"></div>
+                        <div class="absolute bottom-4 left-4 right-4 text-white">
+                            <h3 class="font-bold text-lg">ألعاب المحترفين</h3>
+                            <p class="text-sm opacity-90">25 فيديو • 20 ساعة</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm text-gray-600">
+                            <i class="fas fa-play-circle ml-1"></i> 38,760 مشاهدة
+                        </span>
+                        <span class="text-purple-600 font-semibold text-sm">
+                            ابدأ الآن <i class="fas fa-arrow-left mr-1"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-16 bg-gradient-to-r from-purple-600 to-blue-600 text-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold mb-4">
+                هل أنت مستعد لرفع مستواك في لعبة جو؟
+            </h2>
+            <p class="text-xl mb-8 opacity-90">
+                انضم إلى آلاف اللاعبين الذين طوروا مهاراتهم مع دروسنا التعليمية
+            </p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <button class="bg-white text-purple-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">
+                    ابدأ التعلم الآن
+                </button>
+                <button class="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-purple-600 transition">
+                    تصفح جميع الدروس
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <div class="flex items-center space-x-3 space-x-reverse mb-4">
+                        <div class="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center">
+                            <i class="fas fa-circle text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-bold">بوركي جو BourkiGo</h3>
+                    </div>
+                    <p class="text-gray-400 text-sm">
+                        منصتك التعليمية الشاملة لتعلم لعبة جو
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">روابط سريعة</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-white transition">الرئيسية</a></li>
+                        <li><a href="#" class="hover:text-white transition">الدروس التعليمية</a></li>
+                        <li><a href="#" class="hover:text-white transition">الممارسة</a></li>
+                        <li><a href="#" class="hover:text-white transition">المنتدى</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">الدعم</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-white transition">مركز المساعدة</a></li>
+                        <li><a href="#" class="hover:text-white transition">اتصل بنا</a></li>
+                        <li><a href="#" class="hover:text-white transition">الشروط والأحكام</a></li>
+                        <li><a href="#" class="hover:text-white transition">سياسة الخصوصية</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">تابعنا</h4>
+                    <div class="flex space-x-4 space-x-reverse mb-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition">
+                            <i class="fab fa-facebook-f text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition">
+                            <i class="fab fa-instagram text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition">
+                            <i class="fab fa-youtube text-xl"></i>
+                        </a>
+                    </div>
+                    <p class="text-sm text-gray-400">
+                        اشترك في نشرتنا البريدية للحصول على أحدث الدروس
+                    </p>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 pt-8 text-center text-sm text-gray-400">
+                <p>&copy; 2025 بوركي جو BourkiGo. جميع الحقوق محفوظة.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Video Modal -->
+    <div id="videoModal" class="fixed inset-0 bg-black bg-opacity-90 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-hidden">
+            <div class="flex items-center justify-between p-4 border-b">
+                <h3 id="videoTitle" class="text-xl font-bold"></h3>
+                <button onclick="closeVideoModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+            <div class="aspect-video bg-black">
+                <iframe id="videoPlayer" class="w-full h-full" frameborder="0" allowfullscreen></iframe>
+            </div>
+            <div class="p-4">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center space-x-4 space-x-reverse">
+                        <img id="instructorAvatar" src="" alt="المدرب" class="w-12 h-12 rounded-full">
+                        <div>
+                            <h4 id="instructorName" class="font-semibold"></h4>
+                            <p id="instructorTitle" class="text-sm text-gray-600"></p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-4 space-x-reverse">
+                        <button class="flex items-center space-x-2 space-x-reverse text-gray-600 hover:text-purple-600">
+                            <i class="fas fa-thumbs-up"></i>
+                            <span>إعجاب</span>
+                        </button>
+                        <button class="flex items-center space-x-2 space-x-reverse text-gray-600 hover:text-purple-600">
+                            <i class="fas fa-share"></i>
+                            <span>مشاركة</span>
+                        </button>
+                        <button class="flex items-center space-x-2 space-x-reverse text-gray-600 hover:text-purple-600">
+                            <i class="fas fa-bookmark"></i>
+                            <span>حفظ</span>
+                        </button>
+                    </div>
+                </div>
+                <p id="videoDescription" class="text-gray-700"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle mobile menu
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Filter functionality
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => {
+                    b.classList.remove('active');
+                });
+                this.classList.add('active');
+                // Here you would implement actual filtering logic
+            });
+        });
+
+        // Video data
+        const videoData = {
+            'intro-to-go': {
+                title: 'مقدمة في لعبة جو',
+                instructor: 'أحمد محمد',
+                instructorTitle: 'مدرب محترف - درجة 6 دان',
+                description: 'في هذا الدرس، سنتعرف على تاريخ لعبة جو وأهميتها في الثقافة الآسيوية، وكيف تطورت لتصبح واحدة من أكثر الألعاب الاستراتيجية تعقيداً في العالم.',
+                videoId: 'dQw4w9WgXcQ' // Example video ID
+            },
+            'basic-rules': {
+                title: 'القواعد الأساسية بالتفصيل',
+                instructor: 'فاطمة علي',
+                instructorTitle: 'مدربة معتمدة - درجة 4 دان',
+                description: 'شرح مفصل لقواعد لعبة جو الأساسية بما في ذلك كيفية احتجاز الأحجار، مفهوم الحرية، وقاعدة الكو لمنع الحلقات اللانهائية.',
+                videoId: 'dQw4w9WgXcQ'
+            },
+            // Add more video data as needed
+        };
+
+        // Play video function
+        function playVideo(videoId) {
+            const video = videoData[videoId];
+            if (video) {
+                document.getElementById('videoTitle').textContent = video.title;
+                document.getElementById('instructorName').textContent = video.instructor;
+                document.getElementById('instructorTitle').textContent = video.instructorTitle;
+                document.getElementById('videoDescription').textContent = video.description;
+                document.getElementById('videoPlayer').src = `https://www.youtube.com/embed/${video.videoId}`;
+                document.getElementById('instructorAvatar').src = `https://picsum.photos/seed/${video.instructor}/50/50`;
+                document.getElementById('videoModal').classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        // Close video modal
+        function closeVideoModal() {
+            document.getElementById('videoModal').classList.add('hidden');
+            document.getElementById('videoPlayer').src = '';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Open playlist
+        function openPlaylist(playlistId) {
+            // Placeholder for playlist opening functionality
+            console.log('Opening playlist:', playlistId);
+            // You would implement playlist page navigation or modal here
+        }
+
+        // Close modal on escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeVideoModal();
+            }
+        });
+
+        // Close modal on background click
+        document.getElementById('videoModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeVideoModal();
+            }
+        });
+
+        // Search functionality (placeholder)
+        document.querySelector('.search-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const searchTerm = this.value;
+                console.log('Searching for:', searchTerm);
+                // Implement search functionality here
+            }
+        });
+    </script>
+</body>
+</html>
