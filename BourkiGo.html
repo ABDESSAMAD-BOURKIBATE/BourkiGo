@@ -236,6 +236,49 @@
             }
         }
     </style>
+        <style>
+            /* الوضع الليلي */
+            .dark-mode {
+                background: #181824 !important;
+                color: #f3f3f3 !important;
+            }
+            .dark-mode .gradient-bg {
+                background: linear-gradient(135deg, #23235b 0%, #3a3a6c 100%) !important;
+            }
+            .dark-mode .menu-item,
+            .dark-mode .mobile-menu,
+            .dark-mode .desktop-nav {
+                background: #23235b !important;
+                color: #f3f3f3 !important;
+            }
+            .dark-mode .menu-item:hover {
+                background: #3a3a6c !important;
+                color: #fff !important;
+            }
+            .dark-mode .mobile-menu-btn {
+                background: #23235b !important;
+            }
+            .dark-mode .text-purple-800,
+            .dark-mode .text-purple-600,
+            .dark-mode .text-purple-200,
+            .dark-mode .text-purple-300 {
+                color: #e0e0ff !important;
+            }
+            .dark-mode h1, .dark-mode h2, .dark-mode h3, .dark-mode h4, .dark-mode h5, .dark-mode h6 {
+                color: #f3f3f3 !important;
+                text-shadow: 0 2px 8px #23235b44;
+            }
+            .dark-mode p, .dark-mode span, .dark-mode a {
+                color: #e0e0ff !important;
+                text-shadow: 0 1px 4px #23235b22;
+            }
+            .dark-mode .bg-white {
+                background: #23235b !important;
+            }
+            .dark-mode .border-white {
+                border-color: #3a3a6c !important;
+            }
+        </style>
 </head>
 <body class="bg-gradient-to-br from-purple-50 to-blue-50 min-h-screen">
     <!-- Mobile Menu Button -->
@@ -521,6 +564,7 @@
                             حماية أحجارك من الحصر
                         </li>
                     </ul>
+                        <!-- زر تغيير الإضاءة -->
                     <p class="text-gray-600 text-sm mt-4">
                         الفائز هو من يحتلك مساحة أكبر!
                     </p>
@@ -785,6 +829,25 @@
     </div>
 
     <script>
+        // كود الوضع الليلي
+        document.addEventListener('DOMContentLoaded', function() {
+            const darkModeBtn = document.getElementById('toggleDarkMode');
+            if (darkModeBtn) {
+                darkModeBtn.addEventListener('click', function() {
+                    document.body.classList.toggle('dark-mode');
+                    // حفظ الحالة في localStorage
+                    if(document.body.classList.contains('dark-mode')) {
+                        localStorage.setItem('theme', 'dark');
+                    } else {
+                        localStorage.setItem('theme', 'light');
+                    }
+                });
+            }
+            // عند تحميل الصفحة، تحقق من الحالة
+            if(localStorage.getItem('theme') === 'dark') {
+                document.body.classList.add('dark-mode');
+            }
+        });
         // Mobile menu functions
         function toggleMobileMenu() {
             const menu = document.querySelector('.mobile-menu');

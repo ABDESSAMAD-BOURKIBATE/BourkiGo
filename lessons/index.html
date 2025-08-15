@@ -109,7 +109,7 @@
                     </a>
                 </div>
                 <nav class="hidden md:flex space-x-6 space-x-reverse">
-                    <a href="index.html" class="text-gray-600 hover:text-purple-600 transition">الرئيسية</a>
+                    <a href="/index.html" class="text-gray-600 hover:text-purple-600 transition">الرئيسية</a>
                     <a href="#" class="text-purple-600 font-semibold">الدروس التعليمية</a>
                     <a href="#" class="text-gray-600 hover:text-purple-600 transition">الممارسة</a>
                     <a href="#" class="text-gray-600 hover:text-purple-600 transition">المنتدى</a>
@@ -125,7 +125,7 @@
     <!-- Mobile Menu -->
     <div id="mobileMenu" class="hidden bg-white shadow-lg md:hidden">
         <nav class="container mx-auto px-4 py-4 space-y-3">
-            <a href="index.html" class="block text-gray-600 hover:text-purple-600 transition py-2">الرئيسية</a>
+            <a href="/index.html" class="block text-gray-600 hover:text-purple-600 transition py-2">الرئيسية</a>
             <a href="#" class="block text-purple-600 font-semibold py-2">الدروس التعليمية</a>
             <a href="#" class="block text-gray-600 hover:text-purple-600 transition py-2">الممارسة</a>
             <a href="#" class="block text-gray-600 hover:text-purple-600 transition py-2">المنتدى</a>
@@ -164,34 +164,9 @@
         <div class="container mx-auto px-4">
             <div class="flex flex-wrap items-center justify-between gap-4">
                 <div class="flex flex-wrap gap-2">
-                    <button class="filter-btn active px-4 py-2 rounded-full bg-gray-200 text-gray-700 hover:bg-purple-600 hover:text-white transition">
-                        الكل
-                    </button>
+                    <!-- تم إخفاء زر الكل مع باقي الفلاتر حسب طلب المستخدم -->
                     <button class="filter-btn px-4 py-2 rounded-full bg-gray-200 text-gray-700 hover:bg-purple-600 hover:text-white transition">
-                        للمبتدئين
-                    </button>
-                    <button class="filter-btn px-4 py-2 rounded-full bg-gray-200 text-gray-700 hover:bg-purple-600 hover:text-white transition">
-                        للمتوسطين
-                    </button>
-                    <button class="filter-btn px-4 py-2 rounded-full bg-gray-200 text-gray-700 hover:bg-purple-600 hover:text-white transition">
-                        للمتقدمين
-                    </button>
-                    <button class="filter-btn px-4 py-2 rounded-full bg-gray-200 text-gray-700 hover:bg-purple-600 hover:text-white transition">
-                        استراتيجيات
-                    </button>
-                    <button class="filter-btn px-4 py-2 rounded-full bg-gray-200 text-gray-700 hover:bg-purple-600 hover:text-white transition">
-                        مشاكل وحلول
-                    </button>
-                </div>
-                <div class="flex items-center gap-2">
-                    <span class="text-gray-600">الترتيب حسب:</span>
-                    <select class="px-3 py-2 border rounded-lg focus:outline-none focus:border-purple-600">
-                        <option>الأحدث</option>
-                        <option>الأكثر مشاهدة</option>
-                        <option>الأعلى تقييماً</option>
-                        <option>الأطول مدة</option>
-                    </select>
-                </div>
+                <!-- تم إخفاء شريط الفلاتر والترتيب حسب طلب المستخدم -->
             </div>
         </div>
     </section>
@@ -200,39 +175,59 @@
     <section class="py-12">
         <div class="container mx-auto px-4">
             <h2 class="text-3xl font-bold text-gray-800 mb-8 text-center">
-                <i class="fas fa-star text-yellow-500 ml-2"></i>الدرس المميز هذا الأسبوع
+                <i class="fas fa-star text-yellow-500 ml-2"></i>الذكاء الاصطناعي الذي حاول التغلب على بطل العالم في لعبة غو. وثائقي مترجم
             </h2>
             
             <div class="featured-video rounded-2xl overflow-hidden shadow-2xl max-w-4xl mx-auto">
                 <div class="relative aspect-video">
-                    <img src="https://picsum.photos/seed/featured-go-lesson/800/450" alt="الدرس المميز" class="w-full h-full object-cover">
-                    <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
-                        <div class="text-center text-white">
-                            <div class="play-button w-20 h-20 bg-white bg-opacity-90 rounded-full flex items-center justify-center pulse-animation">
-                                <i class="fas fa-play text-purple-600 text-3xl ml-1"></i>
+                    <div id="featured-video-trigger" style="cursor:pointer; position:relative;">
+                        <img src="images/go1.jpg" alt="وثائقي أساسيات لعبة جو" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center" style="z-index:2;">
+                            <div class="w-full h-full flex items-center justify-center">
+                                <div class="play-button w-12 h-12 bg-white bg-opacity-90 rounded-full flex items-center justify-center pulse-animation">
+                                    <i class="fas fa-play text-purple-600 text-lg ml-1"></i>
+                                </div>
                             </div>
-                            <h3 class="text-2xl font-bold mt-6 mb-2">أساسيات لعبة جو في 30 دقيقة</h3>
-                            <p class="text-lg opacity-90">تعلم القواعد الأساسية وأول استراتيجياتك</p>
+                            
+                        </div>
+                        <div class="duration-badge bg-black bg-opacity-75 text-white px-3 py-1 rounded text-sm" style="position:absolute; bottom:12px; left:16px; z-index:3;">
+                            1:30:53
                         </div>
                     </div>
-                    <div class="duration-badge bg-black bg-opacity-75 text-white px-3 py-1 rounded text-sm">
-                        30:45
-                    </div>
+    <!-- نافذة منبثقة للفيديو -->
+    <div id="featured-video-modal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.8); z-index:9999; align-items:center; justify-content:center;">
+        <div style="position:relative; max-width:900px; width:90vw; background:#222; border-radius:16px; box-shadow:0 4px 32px #000; padding:20px;">
+            <button onclick="closeFeaturedVideoModal()" style="position:absolute; top:10px; right:10px; background:transparent; color:#e53e3e; border:none; border-radius:50%; width:48px; height:48px; font-size:2em; cursor:pointer; display:flex; align-items:center; justify-content:center;">
+                <span style="font-size:2em; font-weight:bold;">&times;</span>
+            </button>
+            <div style="position:relative; padding-bottom:56.25%; height:0;">
+                <iframe id="featured-video-iframe" src="" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;border-radius:12px;"></iframe>
+            </div>
+        </div>
+    </div>
+    <script>
+        const trigger = document.getElementById('featured-video-trigger');
+        const modal = document.getElementById('featured-video-modal');
+        const iframe = document.getElementById('featured-video-iframe');
+        const videoUrl = "https://www.youtube.com/embed/36KUfQ581Fw?si=9DmJmqBbl9O2_JtB&autoplay=1";
+
+        function openFeaturedVideoModal() {
+            modal.style.display = 'flex';
+            iframe.src = videoUrl;
+            document.body.style.overflow = 'hidden';
+        }
+        function closeFeaturedVideoModal() {
+            modal.style.display = 'none';
+            iframe.src = "";
+            document.body.style.overflow = '';
+        }
+        if(trigger) {
+            trigger.onclick = openFeaturedVideoModal;
+        }
+    </script>
                 </div>
                 <div class="p-6 bg-white">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-4 space-x-reverse">
-                            <img src="https://picsum.photos/seed/instructor1/50/50" alt="المدرب" class="w-12 h-12 rounded-full">
-                            <div>
-                                <h4 class="font-semibold">أحمد محمد</h4>
-                                <p class="text-sm text-gray-600">مدرب محترف - درجة 6 دان</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center space-x-4 space-x-reverse text-gray-600">
-                            <span><i class="fas fa-eye ml-1"></i> 45,234 مشاهدة</span>
-                            <span><i class="fas fa-star text-yellow-500 ml-1"></i> 4.9</span>
-                        </div>
-                    </div>
+                    <!-- تم حذف معلومات المدرب والمشاهدات والتقييم بناءً على طلب المستخدم -->
                 </div>
             </div>
         </div>
@@ -574,93 +569,7 @@
     </section>
 
     <!-- Live Sessions Section -->
-    <section class="py-12 bg-purple-50">
-        <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold text-gray-800 mb-8 text-center">
-                <i class="fas fa-video text-red-500 ml-2"></i>جلسات مباشرة قادمة
-            </h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Live Session 1 -->
-                <div class="bg-white rounded-lg p-6 shadow-lg">
-                    <div class="flex items-center justify-between mb-4">
-                        <span class="bg-red-100 text-red-600 px-3 py-1 rounded-full text-sm font-semibold">
-                            <i class="fas fa-circle text-red-500 ml-1 text-xs"></i> مباشر قريباً
-                        </span>
-                        <span class="text-gray-500 text-sm">
-                            <i class="fas fa-calendar ml-1"></i> 15 ديسمبر
-                        </span>
-                    </div>
-                    <h3 class="font-bold text-lg mb-2">ورشة عمل: استراتيجيات الهجوم</h3>
-                    <p class="text-gray-600 mb-4">تعلم أفضل تقنيات الهجوم مع المدرب خالد</p>
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-2 space-x-reverse">
-                            <img src="https://picsum.photos/seed/instructor2/40/40" alt="المدرب" class="w-10 h-10 rounded-full">
-                            <div>
-                                <p class="font-semibold text-sm">خالد أحمد</p>
-                                <p class="text-xs text-gray-500">الساعة 8:00 مساءً</p>
-                            </div>
-                        </div>
-                        <button class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition">
-                            تذكير
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Live Session 2 -->
-                <div class="bg-white rounded-lg p-6 shadow-lg">
-                    <div class="flex items-center justify-between mb-4">
-                        <span class="bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm font-semibold">
-                            <i class="fas fa-users ml-1"></i> مفتوح للجميع
-                        </span>
-                        <span class="text-gray-500 text-sm">
-                            <i class="fas fa-calendar ml-1"></i> 18 ديسمبر
-                        </span>
-                    </div>
-                    <h3 class="font-bold text-lg mb-2">تحليل لعبة الأسبوع</h3>
-                    <p class="text-gray-600 mb-4">تحليل مفصل لأفضل الألعاب هذا الأسبوع</p>
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-2 space-x-reverse">
-                            <img src="https://picsum.photos/seed/instructor3/40/40" alt="المدرب" class="w-10 h-10 rounded-full">
-                            <div>
-                                <p class="font-semibold text-sm">سارة محمد</p>
-                                <p class="text-xs text-gray-500">الساعة 7:00 مساءً</p>
-                            </div>
-                        </div>
-                        <button class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition">
-                            تذكير
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Live Session 3 -->
-                <div class="bg-white rounded-lg p-6 shadow-lg">
-                    <div class="flex items-center justify-between mb-4">
-                        <span class="bg-green-100 text-green-600 px-3 py-1 rounded-full text-sm font-semibold">
-                            <i class="fas fa-graduation-cap ml-1"></i> للمتقدمين
-                        </span>
-                        <span class="text-gray-500 text-sm">
-                            <i class="fas fa-calendar ml-1"></i> 22 ديسمبر
-                        </span>
-                    </div>
-                    <h3 class="font-bold text-lg mb-2">تسوميجو متقدم</h3>
-                    <p class="text-gray-600 mb-4">حل مشاكل معقدة مع المدرب يوسف</p>
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-2 space-x-reverse">
-                            <img src="https://picsum.photos/seed/instructor4/40/40" alt="المدرب" class="w-10 h-10 rounded-full">
-                            <div>
-                                <p class="font-semibold text-sm">يوسف علي</p>
-                                <p class="text-xs text-gray-500">الساعة 9:00 مساءً</p>
-                            </div>
-                        </div>
-                        <button class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition">
-                            تذكير
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    <!-- تم حذف قسم جلسات مباشرة قادمة بناءً على طلب المستخدم -->
 
     <!-- Popular Playlists -->
     <section class="py-12">
@@ -792,7 +701,7 @@
                 <div>
                     <h4 class="font-semibold mb-4">روابط سريعة</h4>
                     <ul class="space-y-2 text-sm text-gray-400">
-                        <li><a href="#" class="hover:text-white transition">الرئيسية</a></li>
+                        <li><a href="/index.html" class="hover:text-white transition">الرئيسية</a></li>
                         <li><a href="#" class="hover:text-white transition">الدروس التعليمية</a></li>
                         <li><a href="#" class="hover:text-white transition">الممارسة</a></li>
                         <li><a href="#" class="hover:text-white transition">المنتدى</a></li>
@@ -839,44 +748,6 @@
 
     <!-- Video Modal -->
     <div id="videoModal" class="fixed inset-0 bg-black bg-opacity-90 z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-hidden">
-            <div class="flex items-center justify-between p-4 border-b">
-                <h3 id="videoTitle" class="text-xl font-bold"></h3>
-                <button onclick="closeVideoModal()" class="text-gray-500 hover:text-gray-700">
-                    <i class="fas fa-times text-2xl"></i>
-                </button>
-            </div>
-            <div class="aspect-video bg-black">
-                <iframe id="videoPlayer" class="w-full h-full" frameborder="0" allowfullscreen></iframe>
-            </div>
-            <div class="p-4">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="flex items-center space-x-4 space-x-reverse">
-                        <img id="instructorAvatar" src="" alt="المدرب" class="w-12 h-12 rounded-full">
-                        <div>
-                            <h4 id="instructorName" class="font-semibold"></h4>
-                            <p id="instructorTitle" class="text-sm text-gray-600"></p>
-                        </div>
-                    </div>
-                    <div class="flex items-center space-x-4 space-x-reverse">
-                        <button class="flex items-center space-x-2 space-x-reverse text-gray-600 hover:text-purple-600">
-                            <i class="fas fa-thumbs-up"></i>
-                            <span>إعجاب</span>
-                        </button>
-                        <button class="flex items-center space-x-2 space-x-reverse text-gray-600 hover:text-purple-600">
-                            <i class="fas fa-share"></i>
-                            <span>مشاركة</span>
-                        </button>
-                        <button class="flex items-center space-x-2 space-x-reverse text-gray-600 hover:text-purple-600">
-                            <i class="fas fa-bookmark"></i>
-                            <span>حفظ</span>
-                        </button>
-                    </div>
-                </div>
-                <p id="videoDescription" class="text-gray-700"></p>
-            </div>
-        </div>
-    </div>
 
     <script>
         // Toggle mobile menu
@@ -930,33 +801,6 @@
             }
         }
 
-        // Close video modal
-        function closeVideoModal() {
-            document.getElementById('videoModal').classList.add('hidden');
-            document.getElementById('videoPlayer').src = '';
-            document.body.style.overflow = 'auto';
-        }
-
-        // Open playlist
-        function openPlaylist(playlistId) {
-            // Placeholder for playlist opening functionality
-            console.log('Opening playlist:', playlistId);
-            // You would implement playlist page navigation or modal here
-        }
-
-        // Close modal on escape key
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closeVideoModal();
-            }
-        });
-
-        // Close modal on background click
-        document.getElementById('videoModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeVideoModal();
-            }
-        });
 
         // Search functionality (placeholder)
         document.querySelector('.search-input').addEventListener('keypress', function(e) {
